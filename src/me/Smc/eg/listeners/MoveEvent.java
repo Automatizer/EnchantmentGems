@@ -28,12 +28,6 @@ public class MoveEvent implements Listener{
 	
 	@EventHandler
 	public void onMove(PlayerMoveEvent e){
-		//if(System.currentTimeMillis() >= prevTime + rateLimit){
-		//	prevTime = System.currentTimeMillis();
-		//	if(e.getPlayer().getInventory().getChestplate() != null && EnchantManager.hasEnchant(e.getPlayer().getInventory().getChestplate(), "magnet")) {
-				//EnchantManager.callEvent(e.getPlayer().getInventory().getChestplate(), "onMove", e.getPlayer(), null, 0.0, null);
-		//	}
-		//}	
 		if(!e.isCancelled() && e.getFrom().getBlock().getLocation() != e.getTo().getBlock().getLocation()){
 			final Player player = e.getPlayer();
 			final UUID uuid = player.getUniqueId();

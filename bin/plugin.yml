@@ -1,0 +1,19 @@
+name: EnchantmentGems
+author: Smc
+main: me.Smc.eg.main.Main
+description: Enchantment Gems
+version: 1.0
+depend: [GUI-API]
+commands:
+    eg:
+        usage: /<command>
+        description: Main command for Enchantment Gems.
+    sudoku:
+        usage: /<command>
+        description: Commit sudoku at will.
+    map:
+        usage: /<command>
+        description: Get the map link.
+    trash:
+        usage: /<command>
+        description: Open a trash GUI.

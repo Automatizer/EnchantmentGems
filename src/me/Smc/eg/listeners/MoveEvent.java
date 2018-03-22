@@ -17,8 +17,6 @@ import me.Smc.eg.enchants.EnchantManager;
 public class MoveEvent implements Listener{
 
 	Plugin plugin;
-	int rateLimit = 100;
-	long prevTime = 0;
 	public static ArrayList<UUID> readyToJump = new ArrayList<UUID>();
 	
 	public MoveEvent(Plugin plugin){

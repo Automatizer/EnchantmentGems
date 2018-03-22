@@ -73,7 +73,6 @@ public class Main extends JavaPlugin{
 		new LoginEvent(this);
 		new WeatherEvent(this);
 		GTL.magnetTicks();
-		//ToolUtils.registerToolMaterials();
 		EnchantManager.loadConfFiles();
 		ChatUtils.messageConsole(ChatUtils.addPrefix(settings.getMessage("Plugin-Enabled")));
 	}

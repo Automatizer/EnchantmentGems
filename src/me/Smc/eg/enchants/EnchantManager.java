@@ -228,6 +228,7 @@ public class EnchantManager{
 		enchants.add(new Slowness());
 		enchants.add(new Starvation());
 		enchants.add(new Unbreakable());
+		enchants.add(new Massbreaker());
 		return enchants;
 	}
 	

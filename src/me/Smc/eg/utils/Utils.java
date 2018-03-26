@@ -1,9 +1,11 @@
 package me.Smc.eg.utils;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -204,6 +206,19 @@ public class Utils{
                 }
             }
         return radiusEntities.toArray(new Entity[radiusEntities.size()]);
+    }
+    
+    public static ArrayList<Block> getNearbyBlocks(Location l, int radius){
+    	ArrayList<Block> blocks = new ArrayList<Block>();
+    	for (int x = radius; x >= -radius; x--) {
+            for (int y = radius; y >= -radius; y--) {
+                for (int z = radius; z >= -radius; z--) {
+                    Block b = l.getBlock().getRelative(x, y, z);
+                    blocks.add(b);
+                }
+            }
+        }
+    	return blocks;
     }
 	
 }

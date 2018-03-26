@@ -8,5 +8,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/auto/Desktop/AT MC server/spigot-1.12.2.jar"/>
 	<classpathentry kind="lib" path="C:/Users/auto/Desktop/AT MC server/plugins/GUI-API.jar"/>
+	<classpathentry kind="lib" path="C:/Users/auto/Desktop/AT MC server/plugins/mcMMO.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

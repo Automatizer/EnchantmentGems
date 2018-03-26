@@ -34,6 +34,7 @@ public class Headhunter extends Enchant{
 		setOption("dropSkullOnFloor", "true");
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void callEvent(ItemStack item, Player player, Entity entity, double value, Block block){
 		if(entity instanceof Player){

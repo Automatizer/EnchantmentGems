@@ -94,7 +94,7 @@ public class BreakEvent implements Listener{
 			}else str = "a";
 			player.sendMessage(ChatColor.GREEN + "You have found " + str + " " + ChatColor.LIGHT_PURPLE + enchant + " " + Utils.getIntInRoman(level) + ChatColor.GREEN + " gem!");
 		}
-		
+		EnchantManager.callEvent(player.getItemInHand(), "blockBreak", player, null, 0, block);
 	}
 	
 }

@@ -1,18 +1,19 @@
 package me.Smc.eg.listeners;
 
-import java.util.ArrayList;
-
+import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
-import me.Smc.eg.enchants.Enchant;
 import me.Smc.eg.enchants.EnchantManager;
 import me.Smc.eg.main.CrystalGUI;
+import me.Smc.eg.main.Main;
 import me.Smc.eg.utils.Settings;
 
 public class InteractEvent implements Listener{
@@ -27,15 +28,26 @@ public class InteractEvent implements Listener{
 	
 	@EventHandler
 	public void interactEvent(PlayerInteractEvent e){
-		if(e.getPlayer().getItemOnCursor() != null){
-			ItemStack held = e.getPlayer().getItemOnCursor();
-			ArrayList<Enchant> enchants = EnchantManager.getEnchants(held);
-			if(!enchants.isEmpty())
-				for(Enchant enchant : enchants)
-					if(enchant.getName().toLowerCase().equalsIgnoreCase("unbreakable")){
-						held.setDurability((short) 0);
-						e.getPlayer().setItemOnCursor(held);	
+		Player player = e.getPlayer();
+		if(player.isSneaking()) {
+			if(e.getAction().equals(Action.RIGHT_CLICK_AIR)) {
+				@SuppressWarnings("deprecation")
+				ItemStack is = player.getItemInHand();
+				if(is != null) {
+					if(EnchantManager.hasEnchant(is, "massbreaker")) {
+						new BukkitRunnable() {
+							public void run() {
+								if(!isListed(player)) {
+									list(player);
+								}else {
+									unlist(player);
+								}
+							}
+						}.runTaskLater(plugin, 5);
 					}
+					
+				}
+			}
 		}
 		if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK)){
 			ItemStack crystalGUIActivator = settings.getConfig().getItemStack("Crystal-GUI-Activator");
@@ -46,6 +58,23 @@ public class InteractEvent implements Listener{
 				return;
 			}
 		}
+	}
+	
+	private void list(Player p) {
+		Main.massbreakers.add(p);
+		p.sendMessage(ChatColor.GREEN + "You have enabled Massbreaker!");
+	}
+	
+	private void unlist(Player p) {
+		Main.massbreakers.remove(p);
+		p.sendMessage(ChatColor.YELLOW + "You have disabled Massbreaker!");
+	}
+	
+	private boolean isListed(Player p) {
+		if(Main.massbreakers.contains(p)) {
+			return true;
+		}
+		else return false;
 	}
 	
 }

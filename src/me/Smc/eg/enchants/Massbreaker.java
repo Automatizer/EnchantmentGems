@@ -2,6 +2,7 @@ package me.Smc.eg.enchants;
 
 import java.util.ArrayList;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -10,6 +11,12 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
+
+import com.gmail.nossr50.datatypes.player.McMMOPlayer;
+import com.gmail.nossr50.datatypes.skills.XPGainReason;
+import com.gmail.nossr50.skills.mining.Mining;
+import com.gmail.nossr50.skills.mining.MiningManager;
+import com.gmail.nossr50.util.player.UserManager;
 
 import me.Smc.eg.main.Main;
 import me.Smc.eg.utils.Utils;
@@ -38,6 +45,12 @@ public class Massbreaker extends Enchant{
 			if(isEnabled(player)) {
 				for(Block b : getBlocks(block.getLocation(), EnchantManager.getEnchantLevel(item, this))) {
 					if(!((b.getType().equals(Material.AIR)) || (b.getType().equals(Material.BEDROCK)) || (b.getType().equals(Material.WATER)) || (b.getType().equals(Material.LAVA)))) {
+						
+						if(Bukkit.getPluginManager().getPlugin("mcMMO") != null && Bukkit.getPluginManager().getPlugin("mcMMO").isEnabled()) {
+							McMMOPlayer mp = UserManager.getPlayer(player);
+							MiningManager manager = mp.getMiningManager();
+							manager.applyXpGain(Mining.getBlockXp(b.getState()), XPGainReason.PVE);
+						}
 						if(item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)) {
 							b.getWorld().dropItem(b.getLocation(), new ItemStack(b.getType()));
 							b.setType(Material.AIR);

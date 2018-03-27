@@ -7,9 +7,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import me.Smc.eg.enchants.EnchantManager;
 import me.Smc.eg.main.CrystalGUI;
@@ -28,22 +28,20 @@ public class InteractEvent implements Listener{
 	
 	@EventHandler
 	public void interactEvent(PlayerInteractEvent e){
+		if(e.getHand() == EquipmentSlot.OFF_HAND) {
+			return;
+		}
 		Player player = e.getPlayer();
 		if(player.isSneaking()) {
 			if(e.getAction().equals(Action.RIGHT_CLICK_AIR)) {
-				@SuppressWarnings("deprecation")
-				ItemStack is = player.getItemInHand();
+				ItemStack is = player.getInventory().getItemInMainHand();
 				if(is != null) {
 					if(EnchantManager.hasEnchant(is, "massbreaker")) {
-						new BukkitRunnable() {
-							public void run() {
-								if(!isListed(player)) {
-									list(player);
-								}else {
-									unlist(player);
-								}
-							}
-						}.runTaskLater(plugin, 5);
+						if(!isListed(player)) {
+							list(player);
+						}else {
+							unlist(player);
+						}
 					}
 					
 				}

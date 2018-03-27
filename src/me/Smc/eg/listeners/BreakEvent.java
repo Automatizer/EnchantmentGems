@@ -7,9 +7,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 import me.Smc.eg.enchants.EnchantManager;
+import me.Smc.eg.main.Main;
 import me.Smc.eg.utils.Utils;
 import net.md_5.bungee.api.ChatColor;
 
@@ -22,7 +24,6 @@ public class BreakEvent implements Listener{
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onBreak(BlockBreakEvent e){
 		Block block = e.getBlock();
@@ -30,8 +31,8 @@ public class BreakEvent implements Listener{
 		Material type = block.getType();
 		String enchant = "";
 		int level = 0;
-		boolean b = false;
-		if(player.getItemInHand().getEnchantments().containsKey(Enchantment.SILK_TOUCH)) b = true;
+		ItemStack is = player.getInventory().getItemInMainHand();
+		boolean b = is.containsEnchantment(Enchantment.SILK_TOUCH);
 		switch(type){
 			case DIAMOND_ORE: 
 				int random = Utils.randomBetween(0, 10000);
@@ -86,15 +87,16 @@ public class BreakEvent implements Listener{
 			default: break;
 		}
 		if(enchant != "" && level != 0 && b != true){
-			//player.getInventory().addItem(EnchantManager.getEnchant(enchant).getCrystal().getItem(level));
-			player.getLocation().getWorld().dropItem(player.getLocation(), EnchantManager.getEnchant(enchant).getCrystal().getItem(level));
+			player.getWorld().dropItem(player.getLocation(), EnchantManager.getEnchant(enchant).getCrystal().getItem(level));
 			String str = "";
 			if((enchant.startsWith("a")) || (enchant.startsWith("e")) || (enchant.startsWith("i")) || (enchant.startsWith("o")) || (enchant.startsWith("u")) || (enchant.startsWith("y"))){
 				str = "an";
 			}else str = "a";
 			player.sendMessage(ChatColor.GREEN + "You have found " + str + " " + ChatColor.LIGHT_PURPLE + enchant + " " + Utils.getIntInRoman(level) + ChatColor.GREEN + " gem!");
 		}
-		EnchantManager.callEvent(player.getItemInHand(), "blockBreak", player, null, 0, block);
+		if(EnchantManager.hasEnchant(is, "massbreaker") && Main.massbreakers.contains(player)) {
+			EnchantManager.callEvent(player.getInventory().getItemInMainHand(), "blockBreak", player, null, 0, block);
+		}
 	}
 	
 }

@@ -19,7 +19,6 @@ public class Flash extends Enchant{
 		super("flash");
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void setDefaults(){
 		typesAllowed.add("boots");
@@ -29,7 +28,7 @@ public class Flash extends Enchant{
 		permission = "eg.enchant.flash.#";
 		crystal = new Crystal(this);
 		crystal.displayName = "&3Flash {enchantlevel}";
-		crystal.material = new MaterialData(Material.EMERALD, (byte) 0);
+		crystal.material = new MaterialData(Material.EMERALD);
 		setOption("basePercentage", "10");
 		setOption("percentageGainPerEnchantLevel", "15");
 	}

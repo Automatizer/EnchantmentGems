@@ -31,7 +31,6 @@ public class Purify extends Enchant{
 		super("purify");
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void setDefaults(){
 		typesAllowed.add("sword"); typesAllowed.add("axe"); typesAllowed.add("bow");
@@ -41,7 +40,7 @@ public class Purify extends Enchant{
 		permission = "eg.enchant.purify.#";
 		crystal = new Crystal(this);
 		crystal.displayName = "&3Purify {enchantlevel}";
-		crystal.material = new MaterialData(Material.EMERALD, (byte) 0);
+		crystal.material = new MaterialData(Material.EMERALD);
 		setOption("giveToOpponent", "true");
 		setOption("hitPercentage", "5");
 		setOption("hitPercentageGainPerEnchantLevel", "5");

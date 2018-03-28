@@ -13,7 +13,6 @@ import org.bukkit.plugin.Plugin;
 import me.Smc.eg.enchants.EnchantManager;
 import me.Smc.eg.main.Main;
 import me.Smc.eg.utils.Utils;
-import net.md_5.bungee.api.ChatColor;
 
 public class BreakEvent implements Listener{
 
@@ -26,6 +25,7 @@ public class BreakEvent implements Listener{
 	
 	@EventHandler
 	public void onBreak(BlockBreakEvent e){
+		
 		Block block = e.getBlock();
 		Player player = e.getPlayer();
 		Material type = block.getType();
@@ -33,6 +33,9 @@ public class BreakEvent implements Listener{
 		int level = 0;
 		ItemStack is = player.getInventory().getItemInMainHand();
 		boolean b = is.containsEnchantment(Enchantment.SILK_TOUCH);
+		if(EnchantManager.hasEnchant(is, "massbreaker") && Main.massbreakers.contains(player)) {
+			EnchantManager.callEvent(player.getInventory().getItemInMainHand(), "blockBreak", player, null, 0, block);
+		}
 		switch(type){
 			case DIAMOND_ORE: 
 				int random = Utils.randomBetween(0, 10000);
@@ -87,15 +90,7 @@ public class BreakEvent implements Listener{
 			default: break;
 		}
 		if(enchant != "" && level != 0 && b != true){
-			player.getWorld().dropItem(player.getLocation(), EnchantManager.getEnchant(enchant).getCrystal().getItem(level));
-			String str = "";
-			if((enchant.startsWith("a")) || (enchant.startsWith("e")) || (enchant.startsWith("i")) || (enchant.startsWith("o")) || (enchant.startsWith("u")) || (enchant.startsWith("y"))){
-				str = "an";
-			}else str = "a";
-			player.sendMessage(ChatColor.GREEN + "You have found " + str + " " + ChatColor.LIGHT_PURPLE + enchant + " " + Utils.getIntInRoman(level) + ChatColor.GREEN + " gem!");
-		}
-		if(EnchantManager.hasEnchant(is, "massbreaker") && Main.massbreakers.contains(player)) {
-			EnchantManager.callEvent(player.getInventory().getItemInMainHand(), "blockBreak", player, null, 0, block);
+			EnchantManager.dropCrystal(EnchantManager.getEnchant(enchant).getCrystal().getItem(level), block.getLocation(), EnchantManager.getEnchant(enchant), player, level);
 		}
 	}
 	

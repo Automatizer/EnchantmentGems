@@ -15,7 +15,6 @@ public class Lifesteal extends Enchant{
 		super("lifesteal");
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void setDefaults(){
 		typesAllowed.add("sword"); typesAllowed.add("axe");
@@ -25,7 +24,7 @@ public class Lifesteal extends Enchant{
 		permission = "eg.enchant.lifesteal.#";
 		crystal = new Crystal(this);
 		crystal.displayName = "&3Lifesteal {enchantlevel}";
-		crystal.material = new MaterialData(Material.EMERALD, (byte) 0);
+		crystal.material = new MaterialData(Material.EMERALD);
 		setOption("baseHealAmount", "2");
 		setOption("healAmountGainPerEnchantLevel", "1");
 		setOption("hitPercentage", "2");

@@ -13,7 +13,6 @@ public class Replenish extends Enchant{
 		super("replenish");
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void setDefaults(){
 		typesAllowed.add("chestplate");
@@ -23,20 +22,17 @@ public class Replenish extends Enchant{
 		permission = "eg.enchant.replenish.#";
 		crystal = new Crystal(this);
 		crystal.displayName = "&3Replenish {enchantlevel}";
-		crystal.material = new MaterialData(Material.EMERALD, (byte) 0);
+		crystal.material = new MaterialData(Material.EMERALD);
 	}
 
 	@Override
 	public void callEvent(ItemStack item, final Player player, Entity target, double value, Block block){
 		if(player.getInventory().getChestplate() == null){return;}
 		if(EnchantManager.getEnchants(player.getInventory().getChestplate()).isEmpty()){return;}
-		boolean contained = false;
-		for(Enchant enchant : EnchantManager.getEnchants(player.getInventory().getChestplate()))
-			if(enchant.getName().equalsIgnoreCase(getName()))
-				contained = true;
-		if(!contained) return;
-		player.setFoodLevel(20);
-		player.setSaturation(20f);
+		if(EnchantManager.hasEnchant(item, "replenish")) {
+			player.setFoodLevel(20);
+			player.setSaturation(20f);
+		}
 	}
 	
 }

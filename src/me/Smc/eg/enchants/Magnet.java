@@ -18,7 +18,6 @@ public class Magnet extends Enchant{
 		super("magnet");
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void setDefaults(){
 		typesAllowed.add("chestplate");
@@ -28,7 +27,7 @@ public class Magnet extends Enchant{
 		permission = "eg.enchant.magnet.#";
 		crystal = new Crystal(this);
 		crystal.displayName = "&3Magnet {enchantlevel}";
-		crystal.material = new MaterialData(Material.EMERALD, (byte) 0);
+		crystal.material = new MaterialData(Material.EMERALD);
 		setOption("defaultRange", "5");
 		setOption("extraRangePerLevel", "1");
 		setOption("speedPerLevel", "0.25");

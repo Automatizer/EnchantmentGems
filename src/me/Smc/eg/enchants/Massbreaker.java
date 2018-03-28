@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -45,14 +46,19 @@ public class Massbreaker extends Enchant{
 			if(isEnabled(player)) {
 				for(Block b : getBlocks(block.getLocation(), EnchantManager.getEnchantLevel(item, this))) {
 					if(!((b.getType().equals(Material.AIR)) || (b.getType().equals(Material.BEDROCK)) || (b.getType().equals(Material.WATER)) || (b.getType().equals(Material.LAVA)))) {
-						
+						boolean bool = false;
 						if(Bukkit.getPluginManager().getPlugin("mcMMO") != null && Bukkit.getPluginManager().getPlugin("mcMMO").isEnabled()) {
 							McMMOPlayer mp = UserManager.getPlayer(player);
 							MiningManager manager = mp.getMiningManager();
-							manager.applyXpGain(Mining.getBlockXp(b.getState()), XPGainReason.PVE);
+							if(isOre(b)) { 
+								manager.miningBlockCheck(b.getState());
+								bool = true;
+							}else manager.applyXpGain(Mining.getBlockXp(b.getState()), XPGainReason.PVE);
 						}
 						if(item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)) {
-							b.getWorld().dropItem(b.getLocation(), new ItemStack(b.getType()));
+							BlockState bs = b.getState();
+							ItemStack is = new ItemStack(bs.getData().toItemStack(1));
+							if(!bool) b.getWorld().dropItem(b.getLocation(), is);
 							b.setType(Material.AIR);
 						}else {
 							b.breakNaturally();
@@ -72,6 +78,21 @@ public class Massbreaker extends Enchant{
 		if(Main.massbreakers.contains(p)) {
 			return true;
 		}else return false;
+	}
+	
+	private boolean isOre(Block b) {
+		switch(b.getType()) {
+		case COAL_ORE: return true;
+		case IRON_ORE: return true;
+		case GOLD_ORE: return true;
+		case DIAMOND_ORE: return true;
+		case EMERALD_ORE: return true;
+		case GLOWING_REDSTONE_ORE: return true;
+		case REDSTONE_ORE: return true;
+		case LAPIS_ORE: return true;
+		case QUARTZ_ORE: return true;
+		default: return false;
+		}
 	}
 
 }

@@ -18,7 +18,6 @@ public class Slowness extends Enchant{
 		super("slowness");
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void setDefaults(){
 		typesAllowed.add("sword"); typesAllowed.add("axe"); typesAllowed.add("bow");
@@ -28,7 +27,7 @@ public class Slowness extends Enchant{
 		permission = "eg.enchant.slowness.#";
 		crystal = new Crystal(this);
 		crystal.displayName = "&3Slowness {enchantlevel}";
-		crystal.material = new MaterialData(Material.EMERALD, (byte) 0);
+		crystal.material = new MaterialData(Material.EMERALD);
 		setOption("duration", "5");
 		setOption("durationGainPerEnchantLevel", "0");
 		setOption("firstEffectLevel", "1");

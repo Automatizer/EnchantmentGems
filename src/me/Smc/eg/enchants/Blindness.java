@@ -18,7 +18,6 @@ public class Blindness extends Enchant{
 		super("blindness");
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void setDefaults(){
 		typesAllowed.add("sword"); typesAllowed.add("axe");
@@ -28,7 +27,7 @@ public class Blindness extends Enchant{
 		permission = "eg.enchant.blindness.#";
 		crystal = new Crystal(this);
 		crystal.displayName = "&3Blindness {enchantlevel}";
-		crystal.material = new MaterialData(Material.EMERALD, (byte) 0);
+		crystal.material = new MaterialData(Material.EMERALD);
 		setOption("duration", "5");
 		setOption("durationGainPerEnchantLevel", "1");
 		setOption("firstEffectLevel", "1");

@@ -15,7 +15,6 @@ public class Haste extends Enchant{
 		super("haste");
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void setDefaults(){
 		typesAllowed.add("sword"); typesAllowed.add("axe"); typesAllowed.add("hoe"); typesAllowed.add("shovel"); typesAllowed.add("pickaxe");
@@ -25,7 +24,7 @@ public class Haste extends Enchant{
 		permission = "eg.enchant.haste.#";
 		crystal = new Crystal(this);
 		crystal.displayName = "&3Haste {enchantlevel}";
-		crystal.material = new MaterialData(Material.EMERALD, (byte) 0);
+		crystal.material = new MaterialData(Material.EMERALD);
 		setOption("firstHasteLevel", "0");
 		setOption("hastePerLevel", "1");
 	}

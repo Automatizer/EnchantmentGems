@@ -23,7 +23,6 @@ public class Leaping extends Enchant{
 		super("leaping");
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void setDefaults(){
 		typesAllowed.add("leggings");
@@ -33,7 +32,7 @@ public class Leaping extends Enchant{
 		permission = "eg.enchant.leaping.#";
 		crystal = new Crystal(this);
 		crystal.displayName = "&3Leaping {enchantlevel}";
-		crystal.material = new MaterialData(Material.EMERALD, (byte) 0);
+		crystal.material = new MaterialData(Material.EMERALD);
 		setOption("extraJumps", "1");
 		setOption("extraJumpsPerLevel", "0.2");
 		setOption("baseJumpPower", "1");

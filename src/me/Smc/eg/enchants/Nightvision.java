@@ -19,7 +19,6 @@ public class Nightvision extends Enchant{
 		super("nightvision");
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void setDefaults(){
 		typesAllowed.add("helmet");
@@ -29,7 +28,7 @@ public class Nightvision extends Enchant{
 		permission = "eg.enchant.nightvision.#";
 		crystal = new Crystal(this);
 		crystal.displayName = "&3Nightvision {enchantlevel}";
-		crystal.material = new MaterialData(Material.EMERALD, (byte) 0);
+		crystal.material = new MaterialData(Material.EMERALD);
 		setOption("effectLevel", "1");
 	}
 	

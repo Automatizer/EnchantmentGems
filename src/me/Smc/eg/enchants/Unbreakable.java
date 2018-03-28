@@ -15,7 +15,6 @@ public class Unbreakable extends Enchant{
 		super("unbreakable");
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void setDefaults(){
 		typesAllowed.add("sword"); typesAllowed.add("axe"); typesAllowed.add("hoe"); typesAllowed.add("shovel"); typesAllowed.add("pickaxe"); typesAllowed.add("bow"); typesAllowed.add("fishing");
@@ -28,7 +27,7 @@ public class Unbreakable extends Enchant{
 		permission = "eg.enchant.unbreakable.#";
 		crystal = new Crystal(this);
 		crystal.displayName = "&3Unbreakable {enchantlevel}";
-		crystal.material = new MaterialData(Material.EMERALD, (byte) 0);
+		crystal.material = new MaterialData(Material.EMERALD);
 		setOption("firstMiningFatigueLevel", "1");
 		setOption("miningFatigueOffPerLevel", "1");
 	}

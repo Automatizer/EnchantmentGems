@@ -18,7 +18,6 @@ public class Poison extends Enchant{
 		super("poison");
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void setDefaults(){
 		typesAllowed.add("sword"); typesAllowed.add("axe");
@@ -28,7 +27,7 @@ public class Poison extends Enchant{
 		permission = "eg.enchant.poison.#";
 		crystal = new Crystal(this);
 		crystal.displayName = "&3Poison {enchantlevel}";
-		crystal.material = new MaterialData(Material.EMERALD, (byte) 0);
+		crystal.material = new MaterialData(Material.EMERALD);
 		setOption("duration", "5");
 		setOption("durationGainPerEnchantLevel", "0");
 		setOption("firstEffectLevel", "1");

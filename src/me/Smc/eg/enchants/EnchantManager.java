@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -277,6 +278,16 @@ public class EnchantManager{
 		if(item.hasItemMeta() && item.getItemMeta().hasLore()) lore = item.getItemMeta().getLore();
 		lore.add(item.getItemMeta().getDisplayName());
 		return Utils.addToIM(item, "", lore);
+	}
+	
+	public static void dropCrystal(ItemStack is, Location loc, Enchant e, Player p, int level) {
+		String enchant = e.getName();
+		String str;
+		loc.getWorld().dropItem(loc, is);
+		if((enchant.startsWith("a")) || (enchant.startsWith("e")) || (enchant.startsWith("i")) || (enchant.startsWith("o")) || (enchant.startsWith("u")) || (enchant.startsWith("y"))){
+			str = "an";
+		}else str = "a";
+		p.sendMessage(ChatColor.GREEN + "You have found " + str + " " + ChatColor.LIGHT_PURPLE + enchant + " " + Utils.getIntInRoman(level) + ChatColor.GREEN + " gem!");
 	}
 	
 }

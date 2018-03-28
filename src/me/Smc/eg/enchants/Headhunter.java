@@ -18,7 +18,6 @@ public class Headhunter extends Enchant{
 		super("headhunter");
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void setDefaults(){
 		typesAllowed.add("sword"); typesAllowed.add("axe");
@@ -28,13 +27,12 @@ public class Headhunter extends Enchant{
 		permission = "eg.enchant.headhunter.#";
 		crystal = new Crystal(this);
 		crystal.displayName = "&3Headhunter {enchantlevel}";
-		crystal.material = new MaterialData(Material.EMERALD, (byte) 0);
+		crystal.material = new MaterialData(Material.EMERALD);
 		setOption("hitPercentage", "20");
 		setOption("hitPercentageGainPerEnchantLevel", "20");
 		setOption("dropSkullOnFloor", "true");
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void callEvent(ItemStack item, Player player, Entity entity, double value, Block block){
 		if(entity instanceof Player){
@@ -46,7 +44,7 @@ public class Headhunter extends Enchant{
 		    	ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
 		        SkullMeta meta = (SkullMeta) skull.getItemMeta();
 		        meta.setDisplayName(String.format(Settings.getInstance().getMessage("Player-Head-Title-Format"), target.getName()));
-		        meta.setOwner(target.getName());
+		        meta.setOwningPlayer(target);
 		        skull.setItemMeta(meta);
 		        if(getBooleanOption("dropSkullOnFloor")) target.getWorld().dropItem(target.getLocation(), skull);
 		        else player.getInventory().addItem(skull);

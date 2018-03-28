@@ -47,6 +47,7 @@ public class InteractEvent implements Listener{
 				}
 			}
 		}
+		
 		if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK)){
 			ItemStack crystalGUIActivator = settings.getConfig().getItemStack("Crystal-GUI-Activator");
 			Block block = e.getClickedBlock();

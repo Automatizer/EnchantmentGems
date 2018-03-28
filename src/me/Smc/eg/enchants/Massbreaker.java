@@ -28,7 +28,6 @@ public class Massbreaker extends Enchant{
 		super("massbreaker");
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void setDefaults() {
 		typesAllowed.add("pickaxe");
@@ -37,7 +36,7 @@ public class Massbreaker extends Enchant{
 		event = "blockBreak";
 		crystal = new Crystal(this);
 		crystal.displayName = "&3Massbreaker {enchantlevel}";
-		crystal.material = new MaterialData(Material.EMERALD, (byte) 0);
+		crystal.material = new MaterialData(Material.EMERALD);
 	}
 
 	@Override

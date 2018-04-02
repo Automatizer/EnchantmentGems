@@ -4,11 +4,22 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import com.gmail.nossr50.datatypes.player.McMMOPlayer;
+import com.gmail.nossr50.datatypes.skills.XPGainReason;
+import com.gmail.nossr50.skills.mining.Mining;
+import com.gmail.nossr50.skills.mining.MiningManager;
+import com.gmail.nossr50.util.player.UserManager;
 
 import me.Smc.eg.enchants.EnchantManager;
 
@@ -110,7 +121,7 @@ public class Utils{
 	 */
 	
 	public static String getCategory(ItemStack item, boolean verifySpecials){
-		String matName = item.getType().name().toLowerCase();
+		String matName = item.getType().toString().toLowerCase();
 		if(InventoryUtils.compareItems(item, Recipes.getRepairGem()) && EnchantManager.checkItemWatermark(item)) return "repairgem";
 		if(InventoryUtils.compareItems(item, Recipes.getSpeedGem()) && EnchantManager.checkItemWatermark(item)) return "speedgem";
 		if(InventoryUtils.compareItems(item, Recipes.getLeapingGem()) && EnchantManager.checkItemWatermark(item)) return "leapinggem";
@@ -127,7 +138,7 @@ public class Utils{
 		if(matName.contains("leggings")) return "leggings";
 		if(matName.contains("boots")) return "boots";
 		if(matName.contains("barrier")) return "barrier";
-		if(matName.contains("fishing")) return "fishing";
+		if(matName.contains("rod")) return "fishing";
 		return "other";
 	}
 	
@@ -219,6 +230,44 @@ public class Utils{
             }
         }
     	return blocks;
+    }
+    
+    public static boolean isOre(Block b) {
+		switch(b.getType()) {
+		case COAL_ORE: return true;
+		case IRON_ORE: return true;
+		case GOLD_ORE: return true;
+		case DIAMOND_ORE: return true;
+		case EMERALD_ORE: return true;
+		case GLOWING_REDSTONE_ORE: return true;
+		case REDSTONE_ORE: return true;
+		case LAPIS_ORE: return true;
+		case QUARTZ_ORE: return true;
+		default: return false;
+		}
+	}
+    
+    public static void breakCheck(Block b, Player player, ItemStack item, Location loc) {
+    	boolean bool = false;
+		if(Bukkit.getPluginManager().getPlugin("mcMMO") != null && Bukkit.getPluginManager().getPlugin("mcMMO").isEnabled()) {
+			McMMOPlayer mp = UserManager.getPlayer(player);
+			MiningManager manager = mp.getMiningManager();
+			if(Utils.isOre(b)) { 
+				manager.miningBlockCheck(b.getState());
+				bool = true;
+			}else manager.applyXpGain(Mining.getBlockXp(b.getState()), XPGainReason.PVE);
+		}
+		if(item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)) {
+			BlockState bs = b.getState();
+			ItemStack is = new ItemStack(bs.getData().toItemStack(1));
+			if(!bool) b.getWorld().dropItem(loc, is);
+			b.setType(Material.AIR);
+		}else {
+			for(ItemStack i : b.getDrops()) {
+				b.getWorld().dropItem(loc, i);
+			}
+			b.setType(Material.AIR);
+		}
     }
 	
 }

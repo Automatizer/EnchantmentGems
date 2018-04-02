@@ -9,9 +9,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
+import de.tr7zw.itemnbtapi.NBTItem;
 import me.Smc.eg.enchants.EnchantManager;
-import me.Smc.eg.main.Main;
+import me.Smc.eg.utils.Cooldowns;
 import me.Smc.eg.utils.Utils;
 
 public class BreakEvent implements Listener{
@@ -33,8 +35,24 @@ public class BreakEvent implements Listener{
 		int level = 0;
 		ItemStack is = player.getInventory().getItemInMainHand();
 		boolean b = is.containsEnchantment(Enchantment.SILK_TOUCH);
-		if(EnchantManager.hasEnchant(is, "massbreaker") && Main.massbreakers.contains(player)) {
-			EnchantManager.callEvent(player.getInventory().getItemInMainHand(), "blockBreak", player, null, 0, block);
+		NBTItem nbti = new NBTItem(is);
+		if(nbti.hasKey("massbreaker")) {
+			if(nbti.getBoolean("massbreaker")) {
+				EnchantManager.callEvent(is, "blockBreak", player, null, 0, block);
+			}
+		}
+		if(Utils.isOre(block)) {
+			if(!Cooldowns.isEnchantOnCooldown("veinminer", player)) {
+				if(EnchantManager.hasEnchant(is, "veinminer")) {
+					EnchantManager.callEvent(is, "veinMine", player, null, 0, block);
+					Cooldowns.addEnchantCooldown("veinminer", player);
+					new BukkitRunnable() {
+						public void run() {
+							Cooldowns.removeEnchantCooldown("veinminer", player);
+						}
+					}.runTaskLater(plugin, 20);
+				}
+			}
 		}
 		switch(type){
 			case DIAMOND_ORE: 

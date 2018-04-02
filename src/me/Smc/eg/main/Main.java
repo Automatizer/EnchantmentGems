@@ -1,9 +1,6 @@
 package me.Smc.eg.main;
 
-import java.util.ArrayList;
-
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
@@ -45,8 +42,6 @@ public class Main extends JavaPlugin{
 	
 	public static Plugin plugin;
 	public static Settings settings = Settings.getInstance();
-	
-	public static ArrayList<Player> massbreakers = new ArrayList<Player>();
 
 	/**
 	 * Enables the plugin

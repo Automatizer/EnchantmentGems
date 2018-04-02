@@ -230,6 +230,7 @@ public class EnchantManager{
 		enchants.add(new Starvation());
 		enchants.add(new Unbreakable());
 		enchants.add(new Massbreaker());
+		enchants.add(new Veinminer());
 		return enchants;
 	}
 	

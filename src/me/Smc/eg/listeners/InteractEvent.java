@@ -10,10 +10,12 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
+import de.tr7zw.itemnbtapi.NBTItem;
 import me.Smc.eg.enchants.EnchantManager;
 import me.Smc.eg.main.CrystalGUI;
-import me.Smc.eg.main.Main;
+import me.Smc.eg.utils.Cooldowns;
 import me.Smc.eg.utils.Settings;
 
 public class InteractEvent implements Listener{
@@ -31,17 +33,27 @@ public class InteractEvent implements Listener{
 		if(e.getHand() == EquipmentSlot.OFF_HAND) {
 			return;
 		}
-		Player player = e.getPlayer();
-		if(player.isSneaking()) {
+		Player p = e.getPlayer();
+		if(p.isSneaking()) {
 			if(e.getAction().equals(Action.RIGHT_CLICK_AIR)) {
-				ItemStack is = player.getInventory().getItemInMainHand();
+				ItemStack is = p.getInventory().getItemInMainHand();
 				if(is != null) {
 					if(EnchantManager.hasEnchant(is, "massbreaker")) {
-						if(!isListed(player)) {
-							list(player);
+						NBTItem nbti = new NBTItem(is);
+						if(nbti.hasKey("massbreaker")) {
+							if(!nbti.getBoolean("massbreaker")) {
+								nbti.setBoolean("massbreaker", true);
+								p.sendMessage(ChatColor.GREEN + "You have enabled Massbreaker!");
+							}else {
+								nbti.setBoolean("massbreaker", false);
+								p.sendMessage(ChatColor.YELLOW + "You have disabled Massbreaker!");
+							}
 						}else {
-							unlist(player);
+							nbti.setBoolean("massbreaker", true);
+							p.sendMessage(ChatColor.GREEN + "You have enabled Massbreaker!");
 						}
+						p.getInventory().remove(is);
+						p.getInventory().addItem(nbti.getItem());
 					}
 					
 				}
@@ -57,23 +69,26 @@ public class InteractEvent implements Listener{
 				return;
 			}
 		}
-	}
-	
-	private void list(Player p) {
-		Main.massbreakers.add(p);
-		p.sendMessage(ChatColor.GREEN + "You have enabled Massbreaker!");
-	}
-	
-	private void unlist(Player p) {
-		Main.massbreakers.remove(p);
-		p.sendMessage(ChatColor.YELLOW + "You have disabled Massbreaker!");
-	}
-	
-	private boolean isListed(Player p) {
-		if(Main.massbreakers.contains(p)) {
-			return true;
+		
+		if((e.getAction().equals(Action.RIGHT_CLICK_AIR)) || (e.getAction().equals(Action.RIGHT_CLICK_BLOCK))) {
+			ItemStack is = p.getInventory().getItemInMainHand();
+			if(is != null) {
+				if(!Cooldowns.isEnchantOnCooldown("veinminer", e.getPlayer())) {
+					if(EnchantManager.hasEnchant(is, "veinminer")) {
+						if(EnchantManager.getEnchantLevel(is, EnchantManager.getEnchant("veinminer")) >= 5) {
+							EnchantManager.callEvent(is, "veinMine", p, null, 1.0, null);
+							Cooldowns.addEnchantCooldown("veinminer", p);
+							new BukkitRunnable() {
+								public void run() {
+									Cooldowns.removeEnchantCooldown("veinminer", p);
+								}
+							}.runTaskLater(plugin, 20);
+						}
+					}
+				}
+				
+			}
 		}
-		else return false;
 	}
 	
 }

@@ -14,6 +14,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import me.Smc.eg.enchants.Enchant;
 import me.Smc.eg.enchants.EnchantManager;
+import me.Smc.eg.enchants.Leaping;
 
 public class EquipEvent implements Listener{
 
@@ -36,7 +37,10 @@ public class EquipEvent implements Listener{
 		ItemStack toCheck = e.getCurrentItem();
 		if(toCheck == null || toCheck.getType().equals(Material.AIR)) toCheck = player.getItemOnCursor();
 		if(e.isShiftClick() && e.getCurrentItem() != null) EnchantManager.callEvent(e.getCurrentItem(), "onEquip", player, null, 0.0, null);
-		else if(e.getSlotType().equals(SlotType.ARMOR)) EnchantManager.callEvent(toCheck, "onEquip", player, null, 0.0, null);
+		else if(e.getSlotType().equals(SlotType.ARMOR)) {
+			EnchantManager.callEvent(toCheck, "onEquip", player, null, 0.0, null);
+			if(EnchantManager.hasEnchant(toCheck, "leaping")) Leaping.addEffect(player, toCheck);
+		}
 	}
 	
 	@EventHandler
@@ -51,6 +55,8 @@ public class EquipEvent implements Listener{
 						if(player.hasPotionEffect(PotionEffectType.NIGHT_VISION)) player.removePotionEffect(PotionEffectType.NIGHT_VISION);
 					}else if(en.getName().equalsIgnoreCase("flash")) {
 						if(player.hasPotionEffect(PotionEffectType.SPEED)) player.removePotionEffect(PotionEffectType.SPEED);
+					}else if(en.getName().equalsIgnoreCase("leaping")) {
+						if(player.hasPotionEffect(PotionEffectType.JUMP)) player.removePotionEffect(PotionEffectType.JUMP);
 					}
 				}
 			}

@@ -56,9 +56,9 @@ public class Purify extends Enchant{
 			int level = EnchantManager.getEnchantLevel(item, this);
 			int hitPercentage = (int) (getDoubleOption("hitPercentage") + getDoubleOption("hitPercentageGainPerEnchantLevel") * (level - 1));
 			boolean canFire = Utils.randomBetween(0, 100) <= hitPercentage ? true : false;
-			if(canFire)
+			/*if(canFire)
 				if(event.equalsIgnoreCase("attackEntity"))
-					if(getBooleanOption("giveToOpponent")) purify(target, player);
+					if(getBooleanOption("giveToOpponent")) purify(target, player);*/
 		}
 	}
 	
@@ -68,7 +68,7 @@ public class Purify extends Enchant{
 	 * @param entity The entity to purify
 	 */
 	
-	public void purify(final Entity entity, final Player player){
+	/*public void purify(final Entity entity, final Player player){
 		((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 4));
 		final Location startLoc = entity.getLocation();
 		final Location targetLoc = entity.getLocation().add(0, getIntOption("ascentTargetYAbove"), 0);
@@ -131,6 +131,6 @@ public class Purify extends Enchant{
 				player.getWorld().spawnEntity(startLoc, EntityType.VILLAGER);
 			}
 		}.runTaskLater(Main.plugin, getIntOption("ascentDurationTicks"));
-	}
+	}*/
 	
 }

@@ -62,7 +62,7 @@ public class Recipes{
 	}
 	
 	public static Recipe getSpeedGemRecipe(){
-		ShapedRecipe recipe = new ShapedRecipe(getSpeedGem());
+		ShapedRecipe recipe = new ShapedRecipe(EnchantManager.getEnchant("flash").getCrystal().getItem(1));
 		recipe.shape("*=*", "-%-", "*=*");
 		recipe.setIngredient('%', Material.CAKE);
 		recipe.setIngredient('-', Material.LAPIS_BLOCK);

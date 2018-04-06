@@ -3,10 +3,14 @@ package me.Smc.eg.utils;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.enchantments.Enchantment;
@@ -230,6 +234,22 @@ public class Utils{
             }
         }
     	return blocks;
+    }
+    
+    public static ArrayList<Chunk> getNearbyChunks(Location l, int radius){
+    	ArrayList<Chunk> chunks = new ArrayList<Chunk>();
+    	List<Integer> range = IntStream.rangeClosed(-radius, radius).boxed().collect(Collectors.toList());
+    	Chunk origin = l.getChunk();
+    	World world = origin.getWorld();
+    	int baseX = origin.getX();
+    	int baseZ = origin.getZ();
+    	for(int x : range) {
+    		for(int z : range) {
+    			Chunk c = world.getChunkAt(baseX + x, baseZ + z);
+    			chunks.add(c);
+    		}
+    	}
+    	return chunks;
     }
     
     public static boolean isOre(Block b) {

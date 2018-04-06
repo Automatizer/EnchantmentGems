@@ -7,13 +7,15 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
+
 import me.Smc.eg.commands.Executor;
 import me.Smc.eg.enchants.EnchantManager;
 import me.Smc.eg.listeners.BreakEvent;
 import me.Smc.eg.listeners.DamageEvent;
 import me.Smc.eg.listeners.DeathEvent;
 import me.Smc.eg.listeners.EquipEvent;
-import me.Smc.eg.listeners.FlightEvent;
 import me.Smc.eg.listeners.HungerEvent;
 import me.Smc.eg.listeners.InteractEvent;
 import me.Smc.eg.listeners.InvClickEvent;
@@ -21,9 +23,12 @@ import me.Smc.eg.listeners.ItemDamageEvent;
 import me.Smc.eg.listeners.JoinEvent;
 import me.Smc.eg.listeners.LoginEvent;
 import me.Smc.eg.listeners.MoveEvent;
+import me.Smc.eg.listeners.SneakEvent;
 import me.Smc.eg.listeners.SwitchToItemEvent;
 import me.Smc.eg.listeners.WeatherEvent;
 import me.Smc.eg.utils.ChatUtils;
+import me.Smc.eg.utils.EntityHider;
+import me.Smc.eg.utils.EntityHider.Policy;
 import me.Smc.eg.utils.GTL;
 import me.Smc.eg.utils.Recipes;
 import me.Smc.eg.utils.Settings;
@@ -42,6 +47,8 @@ public class Main extends JavaPlugin{
 	
 	public static Plugin plugin;
 	public static Settings settings = Settings.getInstance();
+	public static EntityHider entityHider;
+	public static ProtocolManager protocolManager;
 
 	/**
 	 * Enables the plugin
@@ -51,6 +58,7 @@ public class Main extends JavaPlugin{
 	public void onEnable(){
 		plugin = this;
 		settings.setup(this);
+		protocolManager = ProtocolLibrary.getProtocolManager();
 		for(Recipe recipe : Recipes.getRecipes()) getServer().addRecipe(recipe);
 		getServer().addRecipe(new FurnaceRecipe(new ItemStack(Material.LEATHER), Material.ROTTEN_FLESH));
 		this.getCommand("eg").setExecutor(new Executor());
@@ -61,7 +69,7 @@ public class Main extends JavaPlugin{
 		new DamageEvent(this);
 		new DeathEvent(this);
 		new EquipEvent(this);
-		new FlightEvent(this);
+		//new FlightEvent(this);
 		new GUIAPI(this);
 		new HungerEvent(this);
 		new InteractEvent(this);
@@ -72,7 +80,9 @@ public class Main extends JavaPlugin{
 		new SwitchToItemEvent(this);
 		new LoginEvent(this);
 		new WeatherEvent(this);
-		GTL.magnetTicks();
+		new SneakEvent(this);
+		GTL.startLoops();
+		entityHider = new EntityHider(plugin, Policy.BLACKLIST);
 		EnchantManager.loadConfFiles();
 		ChatUtils.messageConsole(ChatUtils.addPrefix(settings.getMessage("Plugin-Enabled")));
 	}

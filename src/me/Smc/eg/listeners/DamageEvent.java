@@ -11,7 +11,6 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.plugin.Plugin;
 
 import me.Smc.eg.enchants.EnchantManager;
-import me.Smc.eg.enchants.Leaping;
 
 public class DamageEvent implements Listener{
 	
@@ -32,7 +31,7 @@ public class DamageEvent implements Listener{
 		}
 		if(entDamager instanceof Player){
 			Player damager = (Player) entDamager;
-			if(damager.getItemOnCursor() != null) EnchantManager.callEvent(damager.getItemOnCursor(), "attackEntity", damager, e.getEntity(), e.getDamage(), null);
+			if(damager.getInventory().getItemInMainHand() != null) EnchantManager.callEvent(damager.getInventory().getItemInMainHand(), "attackEntity", damager, e.getEntity(), e.getDamage(), null);
 			if(damager.getInventory().getBoots() != null) EnchantManager.callEvent(damager.getInventory().getBoots(), "attackEntity", damager, e.getEntity(), e.getDamage(), null);
 		}
 		if(entDamaged instanceof Player){
@@ -45,12 +44,8 @@ public class DamageEvent implements Listener{
 	public void takeDamageEvent(EntityDamageEvent e){
 		if(e.getEntity() instanceof Player){
 			Player player = (Player) e.getEntity();
-			if(Leaping.protectedFromFall.contains(player.getUniqueId())){
-				if(e.getCause().equals(DamageCause.FALL)){
-					Leaping.protectedFromFall.remove(player.getUniqueId());
-					e.setDamage(0.0);
-					e.setCancelled(true);
-				}
+			if(e.getCause().equals(DamageCause.FALL) && EnchantManager.hasEnchant(player.getInventory().getLeggings(), "leaping")) {
+				e.setCancelled(true);
 			}
 		}
 	}

@@ -1,65 +1,173 @@
 package me.Smc.eg.enchants;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.UUID;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Snowball;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 
-import me.Smc.eg.listeners.MoveEvent;
+import com.comphenix.packetwrapper.WrapperPlayServerMapChunk;
+import com.comphenix.protocol.ProtocolManager;
+
+import me.Smc.eg.main.Main;
+import me.Smc.eg.utils.EntityHider;
+import me.Smc.eg.utils.Utils;
 
 public class Leaping extends Enchant{
-
-	public static HashMap<UUID, Integer> jumpsDone = new HashMap<UUID, Integer>();
-	public static HashMap<UUID, Integer> jumpLimit = new HashMap<UUID, Integer>();
-	public static ArrayList<UUID> protectedFromFall = new ArrayList<UUID>();
 	
 	public Leaping(){
 		super("leaping");
 	}
+	
+	public HashMap<String, Integer> charge = new HashMap<String, Integer>();
+	EntityHider entityHider = Main.entityHider;
+	ProtocolManager pm = Main.protocolManager;
 
 	@Override
 	public void setDefaults(){
 		typesAllowed.add("leggings");
 		displayName = "&7Leaping {enchantlevel}";
 		maxLevel = 20;
-		event = "onFlight";
+		event = "onSneak";
 		permission = "eg.enchant.leaping.#";
 		crystal = new Crystal(this);
 		crystal.displayName = "&3Leaping {enchantlevel}";
 		crystal.material = new MaterialData(Material.EMERALD);
-		setOption("extraJumps", "1");
-		setOption("extraJumpsPerLevel", "0.2");
-		setOption("baseJumpPower", "1");
-		setOption("extraJumpPowerPerLevel", "0.2");
 	}
 
 	@Override
-	public void callEvent(ItemStack item, final Player player, Entity target, double value, Block block){
-		int level = EnchantManager.getEnchantLevel(item, this);
-		UUID uuid = player.getUniqueId();
-		if(!protectedFromFall.contains(uuid)) protectedFromFall.add(uuid);
-		int jumpsDone = 0;
-		int jumpLimit = (int) Math.floor(getIntOption("extraJumps") + level * getDoubleOption("extraJumpsPerLevel"));
-		if(Leaping.jumpsDone.containsKey(uuid)) jumpsDone = Leaping.jumpsDone.get(uuid);
-		if(Leaping.jumpLimit.containsKey(uuid)) jumpLimit = Leaping.jumpLimit.get(uuid);
-		player.setFlying(false);
-		double power = getIntOption("baseJumpPower") + (level - 1) * getDoubleOption("extraJumpPowerPerLevel");
-		player.setVelocity(player.getLocation().getDirection().multiply(1 * power).setY(0.75 * power));
-		jumpsDone++;
-		Leaping.jumpsDone.put(uuid, jumpsDone);
-		Leaping.jumpLimit.put(uuid, jumpLimit);
-		if(jumpsDone >= jumpLimit){
-			player.setAllowFlight(false);
-			Leaping.jumpsDone.remove(uuid);
-			Leaping.jumpLimit.remove(uuid);
-			MoveEvent.readyToJump.remove(uuid);
+	public void callEvent(ItemStack item, Player player, Entity target, double value, Block block){
+		if(EnchantManager.hasEnchant(item, this.name)) {
+			int level = EnchantManager.getEnchantLevel(item, this);
+			Timer timer = new Timer();
+			if(value == 0.0) {
+				timer.scheduleAtFixedRate(new TimerTask() {
+					public void run() {
+						if((!(getCharge(player) >= level)) && player.isSneaking()) {
+							setCharge(player, getCharge(player) + 1);
+							player.playSound(player.getLocation(), Sound.BLOCK_NOTE_CHIME, 1, 1);
+						}else {
+							jump(player, getCharge(player));
+							cancel();
+						}
+					}
+				}, 0, 1000);
+			}
 		}
+	}
+	
+	public static void addEffect(Player p, ItemStack is) {
+		int level = EnchantManager.getEnchantLevel(is, EnchantManager.getEnchant("leaping"));
+		int i;
+		switch(level) {
+		case 1: 
+		case 2:
+		case 3:
+		case 4:
+		case 5: i = 1; break;
+		case 6:
+		case 7:
+		case 8:
+		case 9:
+		case 10: i = 2; break;
+		case 11:
+		case 12:
+		case 13:
+		case 14:
+		case 15: i = 3; break;
+		case 16:
+		case 17:
+		case 18:
+		case 19:
+		case 20: i = 4; break;
+		default: i = 1;
+		}
+		p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, i - 1));
+	}
+	
+	private void setCharge(Player p, int value) {
+		charge.put(p.getName(), value);
+	}
+	
+	private int getCharge(Player p) {
+		if(!charge.containsKey(p.getName())) {setCharge(p, 0);}
+		return charge.get(p.getName());
+	}
+	
+	private void jump(Player p, int i) {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(Main.plugin, new SnowballSpawner(p));
+		Thread t = new Thread(new Runnable() {
+			public void run() {
+				try {
+					Thread.sleep(50);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		t.start();
+		try {
+			t.join();
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
+		Snowball sb = SnowballSpawner.getSnowball();
+		sb.setVelocity(sb.getVelocity().multiply(i/3.5));
+		entityHider.hideEntity(p, sb);
+		
+		new BukkitRunnable() {
+			public void run() {
+				sb.getLocation().setDirection(sb.getVelocity());
+				p.teleport(sb.getLocation().add(0, 1, 0).setDirection(sb.getVelocity()));
+				WrapperPlayServerMapChunk chunk = new WrapperPlayServerMapChunk();
+				for(Chunk c : Utils.getNearbyChunks(p.getLocation(), 2)) {
+					if(!c.isLoaded()) {
+						c.load();
+						chunk.setChunkMap(c);
+						chunk.sendPacket(p);
+					}
+				}
+				for(Block b : Utils.getNearbyBlocks(p.getLocation(), 1)) {
+					if(!b.isEmpty()) cancel();
+				}
+				if(sb.isDead()) {
+					cancel();
+				}
+			}
+		}.runTaskTimer(Main.plugin, 1, 1);
+		setCharge(p, 0);
+	}
+	
+}
+
+class SnowballSpawner implements Runnable{
+	
+	static Player p;
+	
+	SnowballSpawner(Player p){
+		SnowballSpawner.p = p;
+	}
+	
+	static Snowball sb;
+	@Override
+	public void run() {
+		sb = p.launchProjectile(Snowball.class);
+	}
+	
+	public static Snowball getSnowball() {
+		return sb;
 	}
 	
 }

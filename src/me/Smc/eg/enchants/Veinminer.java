@@ -30,10 +30,10 @@ public class Veinminer extends Enchant{
 	@Override
 	public void callEvent(ItemStack item, Player player, Entity entity, double value, Block block) {
 		if(EnchantManager.hasEnchant(item, this.name)) {
-			Material mat = block.getType();
-			if(mat == Material.GLOWING_REDSTONE_ORE) mat = Material.REDSTONE_ORE;
 			if(EnchantManager.getEnchantLevel(item, this) < 5) {
 				if(Utils.isOre(block)) {
+					Material mat = block.getType();
+					if(mat == Material.GLOWING_REDSTONE_ORE) mat = Material.REDSTONE_ORE;
 					Location loc = block.getLocation();
 					for(Block b : Utils.getNearbyBlocks(loc, EnchantManager.getEnchantLevel(item, this))) {
 						if(Utils.isOre(b) && b.getType() == mat) {
@@ -51,6 +51,8 @@ public class Veinminer extends Enchant{
 					}
 				}else {
 					if(Utils.isOre(block)) {
+						Material mat = block.getType();
+						if(mat == Material.GLOWING_REDSTONE_ORE) mat = Material.REDSTONE_ORE;
 						Location loc = block.getLocation();
 						for(Block b : Utils.getNearbyBlocks(loc, EnchantManager.getEnchantLevel(item, this))) {
 							if(Utils.isOre(b) && b.getType() == mat) {

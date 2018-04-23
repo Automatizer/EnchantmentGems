@@ -6,6 +6,7 @@ import me.Smc.eg.enchants.EnchantManager;
 import me.Smc.eg.main.Main;
 import me.Smc.eg.utils.ChatUtils;
 import me.Smc.eg.utils.Settings;
+import me.Smc.eg.utils.Utils;
 
 /**
  * This class handles /eg subcommand management
@@ -56,7 +57,10 @@ public class EnchantmentGems{
 			case "add":
 				if(args.length < 2 || args.length > 3) player.sendMessage(ChatUtils.addPrefix(settings.getMessage("Invalid-Arguments")));
 				else EGAdd.runCommand(player, args);
-				
+				break;
+			case "enchant":
+				if(args.length < 2 || args.length > 3) { player.sendMessage(ChatUtils.addPrefix(settings.getMessage("Invalid-Arguments"))); }
+				else EGEnchant.execute(player.getInventory().getItemInMainHand(), EnchantManager.getEnchant(args[1]), Utils.stringToInt(args[2]));
 			default: player.sendMessage(ChatUtils.addPrefix(settings.getMessage("Invalid-Arguments"))); break;
 		}
 	}

@@ -12,6 +12,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
@@ -142,7 +143,7 @@ public class Utils{
 		if(matName.contains("leggings")) return "leggings";
 		if(matName.contains("boots")) return "boots";
 		if(matName.contains("barrier")) return "barrier";
-		if(matName.contains("rod")) return "fishing";
+		if(matName.contains("fishing")) return "fishing";
 		return "other";
 	}
 	
@@ -250,6 +251,17 @@ public class Utils{
     		}
     	}
     	return chunks;
+    }
+    
+    public static ArrayList<Block> getAdjacentBlocks(Block b){
+    	ArrayList<Block> blocks = new ArrayList<Block>();
+    	blocks.add(b.getRelative(BlockFace.NORTH));
+    	blocks.add(b.getRelative(BlockFace.SOUTH));
+    	blocks.add(b.getRelative(BlockFace.EAST));
+    	blocks.add(b.getRelative(BlockFace.WEST));
+    	blocks.add(b.getRelative(BlockFace.DOWN));
+    	blocks.add(b.getRelative(BlockFace.UP));
+    	return blocks;
     }
     
     public static boolean isOre(Block b) {

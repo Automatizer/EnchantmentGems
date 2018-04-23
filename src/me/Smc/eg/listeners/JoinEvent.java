@@ -1,13 +1,10 @@
 package me.Smc.eg.listeners;
 
-import java.io.File;
-
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
-
-import me.Smc.eg.utils.Configuration;
 
 public class JoinEvent implements Listener{
 
@@ -20,8 +17,12 @@ public class JoinEvent implements Listener{
 	
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e){
-		@SuppressWarnings("unused")
-		Configuration cfg = new Configuration(new File("players/" + e.getPlayer().getUniqueId().toString() + ".fuck"));
+		
+	}
+	
+	@EventHandler
+	public void onQuit(PlayerQuitEvent e) {
+		
 	}
 	
 }

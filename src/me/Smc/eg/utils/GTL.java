@@ -1,5 +1,7 @@
 package me.Smc.eg.utils;
 
+import java.util.HashMap;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -15,6 +17,7 @@ public class GTL {
 	final static Plugin pl = Main.plugin;
 	
 	public static void startLoops() {
+		oneTick();
 		fiveTicks();
 	}
 
@@ -28,5 +31,21 @@ public class GTL {
 				}
 			}
 		}.runTaskTimer(pl, 0, 5);
+	}
+	
+	private static void oneTick() {
+		HashMap<Player, Integer> map = Cooldowns.moveListener;
+		new BukkitRunnable() {
+			public void run() {
+				for(Player p: map.keySet()) {
+					if(map.get(p) > 0) {
+						map.put(p, map.get(p) - 1);
+					}
+					else {
+						map.remove(p);
+					}
+				}
+			}
+		}.runTaskTimer(pl, 0, 1);
 	}
 }

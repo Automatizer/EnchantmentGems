@@ -231,6 +231,7 @@ public class EnchantManager{
 		enchants.add(new Unbreakable());
 		enchants.add(new Massbreaker());
 		enchants.add(new Veinminer());
+		enchants.add(new Peaceful());
 		return enchants;
 	}
 	

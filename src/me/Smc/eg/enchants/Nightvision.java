@@ -3,7 +3,6 @@ package me.Smc.eg.enchants;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
@@ -34,20 +33,25 @@ public class Nightvision extends Enchant{
 	
 	@Override
 	public void callEvent(ItemStack item, final Player player, Entity target, double value, Block block){
-		int level = EnchantManager.getEnchantLevel(item, this);
-		addNightvision(player, level);
-		new BukkitRunnable(){
-			public void run(){
-				if(player.getInventory().getHelmet() == null){player.removePotionEffect(PotionEffectType.NIGHT_VISION); cancel(); return;}
-				ItemStack helmet = player.getInventory().getHelmet();
-				if(EnchantManager.getEnchants(helmet).isEmpty()){player.removePotionEffect(PotionEffectType.NIGHT_VISION); cancel(); return;}
-				boolean contained = false;
-				for(Enchant enchant : EnchantManager.getEnchants(helmet))
-					if(enchant.getName().equalsIgnoreCase(getName()))
-						contained = true;
-				if(!contained){player.removePotionEffect(PotionEffectType.NIGHT_VISION); cancel(); return;}
+		if(EnchantManager.hasEnchant(item, this.name)) {
+			int level = EnchantManager.getEnchantLevel(item, this);
+			addNightvision(player, level);
+			new BukkitRunnable(){
+				public void run(){
+					if(player.getInventory().getHelmet() == null){player.removePotionEffect(PotionEffectType.NIGHT_VISION); cancel(); return;}
+					ItemStack helmet = player.getInventory().getHelmet();
+					if(EnchantManager.getEnchants(helmet).isEmpty()){player.removePotionEffect(PotionEffectType.NIGHT_VISION); cancel(); return;}
+					boolean contained = false;
+					for(Enchant enchant : EnchantManager.getEnchants(helmet))
+						if(enchant.getName().equalsIgnoreCase(getName()))
+							contained = true;
+					if(!contained){removeNightvision(player); cancel(); return;}
+				}
+			}.runTaskLater(Main.plugin, 4);
+			if(value == 1.0) {
+				removeNightvision(player);
 			}
-		}.runTaskLater(Main.plugin, 4);
+		}
 	}
 	
 	/**
@@ -57,8 +61,12 @@ public class Nightvision extends Enchant{
 	 * @param level The level of the effect
 	 */
 	
-	public void addNightvision(Entity entity, int level){
-		((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, level - 1));
+	public void addNightvision(Player p, int level){
+		p.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, level - 1));
+	}
+	
+	private void removeNightvision(Player p) {
+		p.removePotionEffect(PotionEffectType.NIGHT_VISION);
 	}
 
 }

@@ -22,8 +22,8 @@ public class Magnet extends Enchant{
 	public void setDefaults(){
 		typesAllowed.add("chestplate");
 		displayName = "&7Magnet {enchantlevel}";
-		maxLevel = 5;
-		event = "onMove";
+		maxLevel = 10;
+		event = "magnet";
 		permission = "eg.enchant.magnet.#";
 		crystal = new Crystal(this);
 		crystal.displayName = "&3Magnet {enchantlevel}";

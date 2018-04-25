@@ -26,7 +26,7 @@ public class GTL {
 			public void run() {
 				for(Player p : Bukkit.getServer().getOnlinePlayers()) {
 					if(p.getInventory().getChestplate() != null && EnchantManager.hasEnchant(p.getInventory().getChestplate(), "magnet")) {
-						EnchantManager.callEvent(p.getInventory().getChestplate(), "onMove", p, null, 0.0, null);
+						EnchantManager.callEvent(p.getInventory().getChestplate(), "magnet", p, null, 0.0, null);
 					}
 				}
 			}

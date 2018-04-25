@@ -10,6 +10,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import me.Smc.eg.main.Main;
 
 public class Leaping extends Enchant{
 	
@@ -32,13 +35,21 @@ public class Leaping extends Enchant{
 
 	@Override
 	public void callEvent(ItemStack item, Player player, Entity target, double value, Block block){
-		if(EnchantManager.hasEnchant(item, this.name)) {
-			int level = EnchantManager.getEnchantLevel(item, this);
-			jump(player, level);
+		if(value == 0.0) {
+			if(EnchantManager.hasEnchant(item, this.name)) {
+				int level = EnchantManager.getEnchantLevel(item, this);
+				jump(player, level);
+			}
+		}
+		if(value == 1.0) {
+			addEffect(player, item);
+		}
+		if(value == 2.0) {
+			player.removePotionEffect(PotionEffectType.JUMP);
 		}
 	}
 	
-	public static void addEffect(Player p, ItemStack is) {
+	public void addEffect(Player p, ItemStack is) {
 		int level = EnchantManager.getEnchantLevel(is, EnchantManager.getEnchant("leaping"));
 		int i;
 		switch(level) {
@@ -65,6 +76,18 @@ public class Leaping extends Enchant{
 		default: i = 1;
 		}
 		p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, i - 1));
+		new BukkitRunnable(){
+			public void run(){
+				if(p.getInventory().getLeggings() == null){p.removePotionEffect(PotionEffectType.JUMP); cancel(); return;}
+				ItemStack leggings = p.getInventory().getLeggings();
+				if(EnchantManager.getEnchants(leggings).isEmpty()){p.removePotionEffect(PotionEffectType.JUMP); cancel(); return;}
+				boolean contained = false;
+				for(Enchant enchant : EnchantManager.getEnchants(leggings))
+					if(enchant.getName().equalsIgnoreCase(getName()))
+						contained = true;
+				if(!contained){p.removePotionEffect(PotionEffectType.JUMP); cancel(); return;}
+			}
+		}.runTaskLater(Main.plugin, 4);
 	}
 	
 	private void jump(Player p, int i) {

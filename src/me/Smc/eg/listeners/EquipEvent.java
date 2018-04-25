@@ -4,17 +4,12 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryType.SlotType;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.potion.PotionEffectType;
 
-import me.Smc.eg.enchants.Enchant;
+import com.codingforcookies.armorequip.ArmorEquipEvent;
+
 import me.Smc.eg.enchants.EnchantManager;
-import me.Smc.eg.enchants.Leaping;
 
 public class EquipEvent implements Listener{
 
@@ -26,20 +21,33 @@ public class EquipEvent implements Listener{
 	}
 	
 	@EventHandler
+	public void onArmorEquip(ArmorEquipEvent e) {
+		ItemStack is = e.getNewArmorPiece();
+		ItemStack old = e.getOldArmorPiece();
+		Player player = e.getPlayer();
+		if(is != null && is.getType() != Material.AIR) {
+			EnchantManager.callEvent(is, "onEquip", player, null, 0.0, null);
+			if(EnchantManager.hasEnchant(is, "leaping")) EnchantManager.callEvent(is, "onLeap", player, null, 1.0, null);
+		}else if(old != null && old.getType() != Material.AIR){
+			EnchantManager.callEvent(old, "onEquip", player, null, 1.0, null);
+			if(EnchantManager.hasEnchant(old, "leaping")) EnchantManager.callEvent(old, "onLeap", player, null, 2.0, null);
+		}
+	}
+	
+	/*@EventHandler
 	public void onRightClickArmor(PlayerInteractEvent e){
 		if(e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK))
-			if(e.getPlayer().getItemOnCursor() != null) EnchantManager.callEvent(e.getPlayer().getItemOnCursor(), "onEquip", e.getPlayer(), null, 0.0, null);
+			if(e.getPlayer().getItemOnCursor() != null) EnchantManager.callEvent(e.getPlayer().getInventory().getItemInMainHand(), "onEquip", e.getPlayer(), null, 0.0, null);
 	}
 	
 	@EventHandler
-	public void onInventoryArmorEquip(InventoryClickEvent e){
+	public void onArmorEquip(InventoryClickEvent e){
 		Player player = (Player) e.getWhoClicked();
 		ItemStack toCheck = e.getCurrentItem();
-		if(toCheck == null || toCheck.getType().equals(Material.AIR)) toCheck = player.getItemOnCursor();
-		if(e.isShiftClick() && e.getCurrentItem() != null) EnchantManager.callEvent(e.getCurrentItem(), "onEquip", player, null, 0.0, null);
-		else if(e.getSlotType().equals(SlotType.ARMOR)) {
+		if(toCheck == null || toCheck.getType().equals(Material.AIR)) return;
+		if(!e.isShiftClick()) {
 			EnchantManager.callEvent(toCheck, "onEquip", player, null, 0.0, null);
-			if(EnchantManager.hasEnchant(toCheck, "leaping")) Leaping.addEffect(player, toCheck);
+			if(EnchantManager.hasEnchant(toCheck, "leaping")) EnchantManager.callEvent(toCheck, "onLeap", player, null, 1.0, null);
 		}
 	}
 	
@@ -61,6 +69,6 @@ public class EquipEvent implements Listener{
 				}
 			}
 		}
-	}
+	}*/
 	
 }

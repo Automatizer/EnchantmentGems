@@ -11,7 +11,6 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.Smc.eg.main.Main;
-import me.Smc.eg.utils.ListUtils;
 
 public class Flash extends Enchant{
 
@@ -35,20 +34,25 @@ public class Flash extends Enchant{
 
 	@Override
 	public void callEvent(ItemStack item, final Player player, Entity target, double value, Block block){
-		int level = EnchantManager.getEnchantLevel(item, this);
-		addFlash(player, level);
-		new BukkitRunnable(){
-			public void run(){
-				if(player.getInventory().getBoots() == null){player.removePotionEffect(PotionEffectType.SPEED); cancel(); return;}
-				ItemStack boots = player.getInventory().getBoots();
-				if(EnchantManager.getEnchants(boots).isEmpty()){player.removePotionEffect(PotionEffectType.SPEED); cancel(); return;}
-				boolean contained = false;
-				for(Enchant enchant : EnchantManager.getEnchants(boots))
-					if(enchant.getName().equalsIgnoreCase(getName()))
-						contained = true;
-				if(!contained){player.removePotionEffect(PotionEffectType.SPEED); cancel(); return;}
+		if(EnchantManager.hasEnchant(item, this.name)) {
+			int level = EnchantManager.getEnchantLevel(item, this);
+			addFlash(player, level);
+			new BukkitRunnable(){
+				public void run(){
+					if(player.getInventory().getBoots() == null){player.removePotionEffect(PotionEffectType.SPEED); cancel(); return;}
+					ItemStack boots = player.getInventory().getBoots();
+					if(EnchantManager.getEnchants(boots).isEmpty()){player.removePotionEffect(PotionEffectType.SPEED); cancel(); return;}
+					boolean contained = false;
+					for(Enchant enchant : EnchantManager.getEnchants(boots))
+						if(enchant.getName().equalsIgnoreCase(getName()))
+							contained = true;
+					if(!contained){player.removePotionEffect(PotionEffectType.SPEED); cancel(); return;}
+				}
+			}.runTaskLater(Main.plugin, 4);
+			if(value == 1.0) {
+				removeFlash(player);
 			}
-		}.runTaskLater(Main.plugin, 4);
+		}
 	}
 	
 	/**
@@ -60,16 +64,10 @@ public class Flash extends Enchant{
 	
 	public void addFlash(Player player, int level){
 		player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, level - 1));
-		ListUtils.flashed.add(player);
 	}
 	
-	public static void removeFlash(Entity entity){
-		if(entity instanceof Player){
-			Player p = (Player) entity;
-			if(ListUtils.flashed.contains(p)){
-				p.removePotionEffect(PotionEffectType.SPEED);
-			}
-		}
+	public static void removeFlash(Player p){
+		p.removePotionEffect(PotionEffectType.SPEED);
 	}
 
 	

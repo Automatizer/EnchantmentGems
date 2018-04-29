@@ -9,6 +9,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -52,8 +53,29 @@ public class InteractEvent implements Listener{
 							nbti.setBoolean("massbreaker", true);
 							p.sendMessage(ChatColor.GREEN + "You have enabled Massbreaker!");
 						}
+						ItemStack newItem = nbti.getItem();
+						ItemMeta im = newItem.getItemMeta();
+						String str = "";
+						ChatColor.stripColor(im.getDisplayName());
+						if(nbti.getBoolean("massbreaker")) {
+							str = ChatColor.GREEN + "Enabled";
+						}else {
+							str = ChatColor.RED + "Disabled";
+						}
+						ChatColor cc = ChatColor.GRAY;
+						String append = cc + "[Massbreaker " + str + cc + "]";
+						String name = im.getDisplayName();
+						String newName;
+						if(name.contains("[Massbreaker")) {
+							newName = name.replace(name.substring(name.indexOf("["), name.lastIndexOf("]")), "%placeholder%");
+						}else {
+							newName = name + "%placeholder%";
+						}
+						im.setDisplayName(newName.replace("%placeholder%", append));
+						if(im.getDisplayName().contains(cc + "]]")) im.setDisplayName(im.getDisplayName().replace(cc + "]]", cc + "]"));
+						newItem.setItemMeta(im);
 						p.getInventory().remove(is);
-						p.getInventory().addItem(nbti.getItem());
+						p.getInventory().addItem(newItem);
 					}
 					
 				}

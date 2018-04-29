@@ -1,5 +1,6 @@
 package me.Smc.eg.commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import me.Smc.eg.enchants.EnchantManager;

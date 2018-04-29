@@ -4,6 +4,7 @@ main: me.Smc.eg.main.Main
 description: Enchantment Gems
 version: 1.0
 depend: [GUI-API, ItemNBTAPI, ProtocolLib, PacketWrapper, ArmorEquipEvent]
+softdepend: [mcMMO]
 commands:
     eg:
         usage: /<command>

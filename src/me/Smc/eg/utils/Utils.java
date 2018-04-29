@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -27,6 +26,7 @@ import com.gmail.nossr50.skills.mining.MiningManager;
 import com.gmail.nossr50.util.player.UserManager;
 
 import me.Smc.eg.enchants.EnchantManager;
+import me.Smc.eg.main.Main;
 
 /**
  * This class handles utilitary methods.
@@ -279,9 +279,10 @@ public class Utils{
 		}
 	}
     
+    @Deprecated
     public static void breakCheck(Block b, Player player, ItemStack item, Location loc) {
     	boolean bool = false;
-		if(Bukkit.getPluginManager().getPlugin("mcMMO") != null && Bukkit.getPluginManager().getPlugin("mcMMO").isEnabled()) {
+		if(Main.mcMMO) {
 			McMMOPlayer mp = UserManager.getPlayer(player);
 			MiningManager manager = mp.getMiningManager();
 			if(Utils.isOre(b)) { 
@@ -299,6 +300,47 @@ public class Utils{
 				b.getWorld().dropItem(loc, i);
 			}
 			b.setType(Material.AIR);
+		}
+    }
+    
+    public static void breakCheck(List<Block> blocks, Player p, ItemStack is, Location loc, List<Material> blacklist, boolean blacklistType) {
+    	boolean bool = false;
+    	if(is.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)) {
+			for(Block b : blocks) {
+				if(blacklist.contains(b.getType()) == blacklistType) {
+					BlockState bs = b.getState();
+					if(Main.mcMMO) {
+						McMMOPlayer mp = UserManager.getPlayer(p);
+						MiningManager manager = mp.getMiningManager();
+						if((Utils.isOre(b)) && (blacklist.contains(b.getType()) == blacklistType)) { 
+							manager.miningBlockCheck(b.getState());
+							bool = true;
+						}else manager.applyXpGain(Mining.getBlockXp(b.getState()), XPGainReason.PVE);
+					}
+					ItemStack item = new ItemStack(bs.getData().toItemStack(1));
+					if(!bool) b.getWorld().dropItem(loc, item);
+					b.setType(Material.AIR);
+				}
+			}
+		}else {
+			for(Block b : blocks) {
+				if(blacklist.contains(b.getType()) == blacklistType) {
+					if(Main.mcMMO) {
+						McMMOPlayer mp = UserManager.getPlayer(p);
+						MiningManager manager = mp.getMiningManager();
+						if((Utils.isOre(b)) && (blacklist.contains(b.getType()) == blacklistType)) { 
+							manager.miningBlockCheck(b.getState());
+							bool = true;
+						}else manager.applyXpGain(Mining.getBlockXp(b.getState()), XPGainReason.PVE);
+					}
+					if(!bool) {
+						for(ItemStack i : b.getDrops()) {
+						b.getWorld().dropItem(loc, i);
+						}
+					}
+					b.setType(Material.AIR);
+				}
+			}
 		}
     }
 	

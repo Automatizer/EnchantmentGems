@@ -34,11 +34,14 @@ public class Massbreaker extends Enchant{
 	public void callEvent(ItemStack item, Player player, Entity entity, double value, Block block) {
 		if(EnchantManager.hasEnchant(item, "massbreaker")) {
 			if(isEnabled(player)) {
-				for(Block b : getBlocks(block.getLocation(), EnchantManager.getEnchantLevel(item, this))) {
-					if(!((b.getType().equals(Material.AIR)) || (b.getType().equals(Material.BEDROCK)) || (b.getType().equals(Material.WATER)) || (b.getType().equals(Material.LAVA)))) {
-						Utils.breakCheck(b, player, item, b.getLocation());
-					}
-				}
+				ArrayList<Material> blacklist = new ArrayList<Material>();
+				blacklist.add(Material.AIR);
+				blacklist.add(Material.BEDROCK);
+				blacklist.add(Material.WATER);
+				blacklist.add(Material.STATIONARY_WATER);
+				blacklist.add(Material.LAVA);
+				blacklist.add(Material.STATIONARY_LAVA);
+				Utils.breakCheck(getBlocks(block.getLocation(), EnchantManager.getEnchantLevel(item, this)), player, item, block.getLocation(), blacklist, false);
 			}
 		}
 	}

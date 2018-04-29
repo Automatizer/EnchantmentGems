@@ -30,7 +30,7 @@ public class Leaping extends Enchant{
 		crystal = new Crystal(this);
 		crystal.displayName = "&3Leaping {enchantlevel}";
 		crystal.material = new MaterialData(Material.EMERALD);
-		setOption("velocity-divider", "2");
+		setOption("velocity-divider", "5");
 	}
 
 	@Override
@@ -95,6 +95,18 @@ public class Leaping extends Enchant{
 		fb.setVelocity(p.getLocation().getDirection().multiply(i / getDoubleOption("velocity-divider")));
 		fb.addPassenger(p);
 		p.playSound(p.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
+	}
+	
+	public static int getJumps(Entity e) {
+		int i = 0;
+		if(e instanceof Player) {
+			Player p = (Player) e;
+			if(EnchantManager.hasEnchant(p.getInventory().getLeggings(), "leaping")) {
+				i = (int) Math.floor(EnchantManager.getEnchantLevel(p.getInventory().getLeggings(), EnchantManager.getEnchant("leaping")) / 4);
+				if(i < 1) i = 1;
+			}
+		}
+		return i;
 	}
 	
 }

@@ -1,5 +1,6 @@
 package me.Smc.eg.main;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
@@ -54,6 +55,7 @@ public class Main extends JavaPlugin{
 	public static Settings settings = Settings.getInstance();
 	public static EntityHider entityHider;
 	public static ProtocolManager protocolManager;
+	public static boolean mcMMO;
 
 	/**
 	 * Enables the plugin
@@ -66,6 +68,9 @@ public class Main extends JavaPlugin{
 		protocolManager = ProtocolLibrary.getProtocolManager();
 		for(Recipe recipe : Recipes.getRecipes()) getServer().addRecipe(recipe);
 		getServer().addRecipe(new FurnaceRecipe(new ItemStack(Material.LEATHER), Material.ROTTEN_FLESH));
+		if(Bukkit.getPluginManager().getPlugin("mcMMO") != null && Bukkit.getPluginManager().getPlugin("mcMMO").isEnabled()) {
+			mcMMO = true;
+		}else {mcMMO = false;}
 		this.getCommand("eg").setExecutor(new Executor());
 		this.getCommand("sudoku").setExecutor(new Executor());
 		this.getCommand("map").setExecutor(new Executor());

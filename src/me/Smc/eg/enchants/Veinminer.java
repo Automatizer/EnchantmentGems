@@ -1,6 +1,7 @@
 package me.Smc.eg.enchants;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -42,9 +43,21 @@ public class Veinminer extends Enchant{
 				if(EnchantManager.getEnchantLevel(item, this) < getIntOption("required-level-for-AOE")) {
 					if(Utils.isOre(block)) {
 						Material mat = block.getType();
-						if(mat == Material.GLOWING_REDSTONE_ORE) mat = Material.REDSTONE_ORE;
+						if(mat == Material.GLOWING_REDSTONE_ORE) block.setType(Material.REDSTONE_ORE);
 						Location loc = block.getLocation();
-						ArrayList<Block> blocks = Utils.getNearbyBlocks(loc, EnchantManager.getEnchantLevel(item, this));
+						final VeinScanner v = new VeinScanner(block);
+						Thread t = new Thread("Vein Scanner") {
+							public void run() {
+								v.start(false);
+							}
+						};
+						t.start();
+						try {
+							t.join();
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						List<Block> blocks = v.getVein();
 						ArrayList<Material> mats = new ArrayList<Material>();
 						mats.add(mat);
 						Utils.breakCheck(blocks, player, item, loc, mats, true);
@@ -52,7 +65,28 @@ public class Veinminer extends Enchant{
 				}else if(EnchantManager.getEnchantLevel(item, this) >= getIntOption("requiredlevel-for-AOE")) {
 					if(value == 1.0) {
 						Location loc = player.getLocation();
-						ArrayList<Block> blocks = Utils.getNearbyBlocks(loc, (int) Math.floor(EnchantManager.getEnchantLevel(item, this) * getDoubleOption("AOE-range-multiplier")));
+						List<Block> list = Utils.getNearbyBlocks(loc, (int) Math.floor(EnchantManager.getEnchantLevel(item, this) * getDoubleOption("AOE-range-multiplier")));
+						for(Block b : new ArrayList<>(list)) {
+							if(b.getType() == Material.GLOWING_REDSTONE_ORE) {
+								b.setType(Material.REDSTONE_ORE);
+							}
+							if(!Utils.isOre(b)) {
+								list.remove(b);
+							}
+						}
+						final VeinScanner v = new VeinScanner(list);
+						Thread t = new Thread("Vein Scanner") {
+							public void run() {
+								v.start(true);
+							}
+						};
+						t.start();
+						try {
+							t.join();
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						List<Block> blocks = v.getVein();
 						ArrayList<Material> mats = new ArrayList<Material>();
 						String[] s = getOption("AOE-materials").split(", ");
 						for(String name : s) {
@@ -71,15 +105,78 @@ public class Veinminer extends Enchant{
 					}else {
 						if(Utils.isOre(block)) {
 							Material mat = block.getType();
-							if(mat == Material.GLOWING_REDSTONE_ORE) mat = Material.REDSTONE_ORE;
+							if(mat == Material.GLOWING_REDSTONE_ORE) block.setType(Material.REDSTONE_ORE);
 							Location loc = block.getLocation();
-							ArrayList<Block> blocks = Utils.getNearbyBlocks(loc, EnchantManager.getEnchantLevel(item, this));
+							final VeinScanner v = new VeinScanner(block);
+							Thread t = new Thread("Vein Scanner") {
+								public void run() {
+									v.start(false);
+								}
+							};
+							t.start();
+							try {
+								t.join();
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+							List<Block> blocks = v.getVein();
 							ArrayList<Material> mats = new ArrayList<Material>();
 							mats.add(mat);
 							Utils.breakCheck(blocks, player, item, loc, mats, true);
 						}
 					}
 				}
+			}
+		}
+	}
+}
+
+class VeinScanner{
+	
+	Block initial;
+	List<Block> vein = new ArrayList<>();
+	
+	public VeinScanner(Block b) {
+		this.initial = b;
+	}
+	
+	public VeinScanner(List<Block> blocks) {
+		for(Block b : blocks) {
+			vein.add(b);
+		}
+		
+	}
+	
+	public void start(boolean b) {
+		estimate(b);
+	}
+	
+	public List<Block> getVein(){
+		return vein;
+	}
+	
+	private void estimate(boolean type) {
+		if(!type) {
+			for(Block b : Utils.getAdjacentBlocks(initial)) {
+				if(b.getType() == initial.getType()) {
+					vein.add(b);
+				}
+			}
+			estimate(true);
+		}else {
+			int i = vein.size();
+			List<Block> copy = new ArrayList<>(vein);
+			for(Block b : copy) {
+				for(Block bl : Utils.getAdjacentBlocks(b)) {
+					if(bl.getType() == b.getType() && !vein.contains(bl)) {
+						vein.add(bl);
+					}
+				}
+			}
+			if(vein.size() > i) {
+				estimate(true);
+			}else {
+				return;
 			}
 		}
 	}

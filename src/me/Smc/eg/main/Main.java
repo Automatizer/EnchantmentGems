@@ -13,6 +13,7 @@ import com.comphenix.protocol.ProtocolManager;
 
 import me.Smc.eg.commands.Executor;
 import me.Smc.eg.enchants.EnchantManager;
+import me.Smc.eg.listeners.BlockChange;
 import me.Smc.eg.listeners.BreakEvent;
 import me.Smc.eg.listeners.DamageEvent;
 import me.Smc.eg.listeners.DeathEvent;
@@ -96,6 +97,7 @@ public class Main extends JavaPlugin{
 		new TargetEvent(this);
 		new EntityChangeBlock(this);
 		new ItemPickup(this);
+		new BlockChange(this);
 		GTL.startLoops();
 		entityHider = new EntityHider(plugin, Policy.BLACKLIST);
 		EnchantManager.loadConfFiles();

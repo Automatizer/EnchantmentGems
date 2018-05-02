@@ -255,12 +255,11 @@ public class Utils{
     
     public static ArrayList<Block> getAdjacentBlocks(Block b){
     	ArrayList<Block> blocks = new ArrayList<Block>();
-    	blocks.add(b.getRelative(BlockFace.NORTH));
-    	blocks.add(b.getRelative(BlockFace.SOUTH));
-    	blocks.add(b.getRelative(BlockFace.EAST));
-    	blocks.add(b.getRelative(BlockFace.WEST));
-    	blocks.add(b.getRelative(BlockFace.DOWN));
-    	blocks.add(b.getRelative(BlockFace.UP));
+    	for(BlockFace bf : BlockFace.values()) {
+    		if((b.getRelative(bf) != null)) {
+    			blocks.add(b.getRelative(bf));
+    		}
+    	}
     	return blocks;
     }
     
@@ -333,12 +332,7 @@ public class Utils{
 							bool = true;
 						}else manager.applyXpGain(Mining.getBlockXp(b.getState()), XPGainReason.PVE);
 					}
-					if(!bool) {
-						for(ItemStack i : b.getDrops()) {
-						b.getWorld().dropItem(loc, i);
-						}
-					}
-					b.setType(Material.AIR);
+					b.breakNaturally();
 				}
 			}
 		}

@@ -33,6 +33,7 @@ public class Veinminer extends Enchant{
 		crystal.material = new MaterialData(Material.EMERALD);
 		setOption("required-level-for-AOE", "5");
 		setOption("AOE-range-multiplier", "1.5");
+		setOption("maximum-range", "35");
 		setOption("AOE-materials", "COAL_ORE, DIAMOND_ORE, EMERALD_ORE, GLOWING_REDSTONE_ORE, GOLD_ORE, IRON_ORE, LAPIS_ORE, QUARTZ_ORE, REDSTONE_ORE");
 	}
 
@@ -43,9 +44,9 @@ public class Veinminer extends Enchant{
 				if(EnchantManager.getEnchantLevel(item, this) < getIntOption("required-level-for-AOE")) {
 					if(Utils.isOre(block)) {
 						Material mat = block.getType();
-						if(mat == Material.GLOWING_REDSTONE_ORE) block.setType(Material.REDSTONE_ORE);
+						if(mat == Material.GLOWING_REDSTONE_ORE) mat = Material.REDSTONE_ORE;
 						Location loc = block.getLocation();
-						final VeinScanner v = new VeinScanner(block);
+						final VeinScanner v = new VeinScanner(block, block.getLocation(), getIntOption("maximum-range"));
 						Thread t = new Thread("Vein Scanner") {
 							public void run() {
 								v.start(false);
@@ -74,7 +75,7 @@ public class Veinminer extends Enchant{
 								list.remove(b);
 							}
 						}
-						final VeinScanner v = new VeinScanner(list);
+						final VeinScanner v = new VeinScanner(list, player.getLocation(), getIntOption("maximum-range"));
 						Thread t = new Thread("Vein Scanner") {
 							public void run() {
 								v.start(true);
@@ -95,7 +96,7 @@ public class Veinminer extends Enchant{
 						Utils.breakCheck(blocks, player, item, loc, mats, true);
 						new BukkitRunnable() {
 							public void run() {
-								for(Entity e : Utils.getNearbyEntities(player.getLocation(), 15)) {
+								for(Entity e : Utils.getNearbyEntities(player.getLocation(), getIntOption("maximum-range") + 5)) {
 									if(e.getType().equals(EntityType.DROPPED_ITEM)) {
 										e.teleport(loc);
 									}
@@ -107,7 +108,7 @@ public class Veinminer extends Enchant{
 							Material mat = block.getType();
 							if(mat == Material.GLOWING_REDSTONE_ORE) block.setType(Material.REDSTONE_ORE);
 							Location loc = block.getLocation();
-							final VeinScanner v = new VeinScanner(block);
+							final VeinScanner v = new VeinScanner(block, block.getLocation(), getIntOption("maximum-range"));
 							Thread t = new Thread("Vein Scanner") {
 								public void run() {
 									v.start(false);
@@ -134,17 +135,22 @@ public class Veinminer extends Enchant{
 class VeinScanner{
 	
 	Block initial;
+	Location initialLoc;
+	int range;
 	List<Block> vein = new ArrayList<>();
 	
-	public VeinScanner(Block b) {
+	public VeinScanner(Block b, Location loc, int range) {
 		this.initial = b;
+		this.initialLoc = loc;
+		this.range = range;
 	}
 	
-	public VeinScanner(List<Block> blocks) {
+	public VeinScanner(List<Block> blocks, Location loc, int range) {
 		for(Block b : blocks) {
 			vein.add(b);
 		}
-		
+		this.initialLoc = loc;
+		this.range = range;
 	}
 	
 	public void start(boolean b) {
@@ -158,7 +164,11 @@ class VeinScanner{
 	private void estimate(boolean type) {
 		if(!type) {
 			for(Block b : Utils.getAdjacentBlocks(initial)) {
-				if(b.getType() == initial.getType()) {
+				Material mat = b.getType();
+				Material iniMat = initial.getType();
+				if(mat == Material.GLOWING_REDSTONE_ORE) mat = Material.REDSTONE_ORE;
+				if(iniMat == Material.GLOWING_REDSTONE_ORE) iniMat = Material.REDSTONE_ORE;
+				if(mat == iniMat) {
 					vein.add(b);
 				}
 			}
@@ -168,7 +178,9 @@ class VeinScanner{
 			List<Block> copy = new ArrayList<>(vein);
 			for(Block b : copy) {
 				for(Block bl : Utils.getAdjacentBlocks(b)) {
-					if(bl.getType() == b.getType() && !vein.contains(bl)) {
+					Material mat = bl.getType();
+					if(mat == Material.GLOWING_REDSTONE_ORE) mat = Material.REDSTONE_ORE;
+					if(bl.getType() == b.getType() && !vein.contains(bl) && (bl.getLocation().distance(initialLoc) < range)) {
 						vein.add(bl);
 					}
 				}

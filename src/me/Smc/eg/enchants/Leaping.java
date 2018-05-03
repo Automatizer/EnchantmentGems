@@ -102,8 +102,7 @@ public class Leaping extends Enchant{
 		if(e instanceof Player) {
 			Player p = (Player) e;
 			if(EnchantManager.hasEnchant(p.getInventory().getLeggings(), "leaping")) {
-				i = (int) Math.floor(EnchantManager.getEnchantLevel(p.getInventory().getLeggings(), EnchantManager.getEnchant("leaping")) / 4);
-				if(i < 1) i = 1;
+				i = (int) Math.floor(EnchantManager.getEnchantLevel(p.getInventory().getLeggings(), EnchantManager.getEnchant("leaping")) / 5) + 1;
 			}
 		}
 		return i;

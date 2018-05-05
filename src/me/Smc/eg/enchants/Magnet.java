@@ -38,9 +38,20 @@ public class Magnet extends Enchant{
 		int level = EnchantManager.getEnchantLevel(item, this);
 		int range = getIntOption("defaultRange") + (level - 1) * getIntOption("extraRangePerLevel");
 		Location origin = player.getLocation();
-		for(Entity entity : Utils.getNearbyEntities(player.getLocation(), range))
+		magnetize(origin, range);
+	}
+
+	@Override
+	public void startup() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public static void magnetize(Location loc, int range) {
+		for(Entity entity : Utils.getNearbyEntities(loc, range)) {
 			if((entity instanceof Item) || (entity instanceof ExperienceOrb)){
-				entity.teleport(origin);
+				entity.teleport(loc);
 			}
+		}
 	}
 }

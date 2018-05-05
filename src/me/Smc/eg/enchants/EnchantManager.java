@@ -27,9 +27,11 @@ public class EnchantManager{
 	 * Loads/generates all enchants' configuration files
 	 */
 	
-	public static void loadConfFiles(){
-		for(Enchant enchant : getAllEnchants())
+	public static void startup(){
+		for(Enchant enchant : getAllEnchants()) {
 			enchant.save();
+			enchant.startup();
+		}
 	}
 	
 	/**

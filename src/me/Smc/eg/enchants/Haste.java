@@ -34,5 +34,11 @@ public class Haste extends Enchant{
 		int level = EnchantManager.getEnchantLevel(item, this);
 		player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, Integer.MAX_VALUE, getIntOption("firstHasteLevel") + getIntOption("hastePerLevel") * (level - 1)));
 	}
+
+	@Override
+	public void startup() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

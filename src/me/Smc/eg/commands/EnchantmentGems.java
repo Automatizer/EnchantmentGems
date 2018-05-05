@@ -1,6 +1,5 @@
 package me.Smc.eg.commands;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import me.Smc.eg.enchants.EnchantManager;
@@ -46,7 +45,7 @@ public class EnchantmentGems{
 			case "reload":
 				if(args.length != 1) player.sendMessage(ChatUtils.addPrefix(settings.getMessage("Invalid-Arguments")));
 				else if(player.hasPermission(settings.getValue("Permission-To-Reload")) || player.isOp()){
-					EnchantManager.loadConfFiles();
+					EnchantManager.startup();
 					settings.setup(Main.plugin);
 					player.sendMessage(ChatUtils.addPrefix(settings.getMessage("Reload-Message")));
 				}else player.sendMessage(ChatUtils.addPrefix(settings.getMessage("Invalid-Perms")));

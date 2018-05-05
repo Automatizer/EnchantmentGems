@@ -60,4 +60,10 @@ public class Massbreaker extends Enchant{
 		return b;
 	}
 
+	@Override
+	public void startup() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

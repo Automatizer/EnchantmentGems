@@ -255,5 +255,7 @@ public abstract class Enchant{
 	 */
 	
 	public abstract void callEvent(ItemStack item, Player player, Entity entity, double value, Block block);
+	
+	public abstract void startup();
 
 }

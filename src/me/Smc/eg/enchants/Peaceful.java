@@ -29,4 +29,10 @@ public class Peaceful extends Enchant{
 		
 	}
 
+	@Override
+	public void startup() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

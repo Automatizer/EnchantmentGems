@@ -38,5 +38,11 @@ public class Unbreakable extends Enchant{
 		if(level < 3)
 			player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, Integer.MAX_VALUE, getIntOption("firstMiningFatigueLevel") - getIntOption("miningFatigueOffPerLevel") * (level - 1)));
 	}
+
+	@Override
+	public void startup() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

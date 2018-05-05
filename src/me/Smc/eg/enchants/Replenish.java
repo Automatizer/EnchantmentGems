@@ -34,5 +34,11 @@ public class Replenish extends Enchant{
 			player.setSaturation(20f);
 		}
 	}
+
+	@Override
+	public void startup() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

@@ -70,5 +70,11 @@ public class Flash extends Enchant{
 		p.removePotionEffect(PotionEffectType.SPEED);
 	}
 
+	@Override
+	public void startup() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 }

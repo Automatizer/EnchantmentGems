@@ -1,28 +1,14 @@
 package me.Smc.eg.enchants;
 
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.Chest;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Skeleton;
-import org.bukkit.entity.Wolf;
 import org.bukkit.entity.Zombie;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
-import org.bukkit.util.Vector;
 
-import me.Smc.eg.main.Main;
 import me.Smc.eg.utils.Utils;
 
 public class Purify extends Enchant{
@@ -60,6 +46,12 @@ public class Purify extends Enchant{
 				if(event.equalsIgnoreCase("attackEntity"))
 					if(getBooleanOption("giveToOpponent")) purify(target, player);*/
 		}
+	}
+
+	@Override
+	public void startup() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	/**

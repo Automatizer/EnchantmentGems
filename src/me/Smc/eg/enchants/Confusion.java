@@ -61,5 +61,11 @@ public class Confusion extends Enchant{
 		((LivingEntity) entity).addPotionEffect(
 				new PotionEffect(PotionEffectType.CONFUSION, (getIntOption("duration") + getIntOption("durationGainPerEnchantLevel") * (level - 1)) * 20, level - 1));
 	}
+
+	@Override
+	public void startup() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

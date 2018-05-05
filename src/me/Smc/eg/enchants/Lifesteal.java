@@ -44,5 +44,11 @@ public class Lifesteal extends Enchant{
 			player.setHealth(healthWithHeal);
 		}
 	}
+
+	@Override
+	public void startup() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

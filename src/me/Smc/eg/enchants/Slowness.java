@@ -62,4 +62,10 @@ public class Slowness extends Enchant{
 				new PotionEffect(PotionEffectType.SLOW, (getIntOption("duration") + getIntOption("durationGainPerEnchantLevel") * (level - 1)) * 20, level - 1));
 	}
 
+	@Override
+	public void startup() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -69,4 +69,10 @@ public class Nightvision extends Enchant{
 		p.removePotionEffect(PotionEffectType.NIGHT_VISION);
 	}
 
+	@Override
+	public void startup() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -14,7 +14,9 @@ import org.bukkit.material.MaterialData;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.Smc.eg.main.Main;
+import me.Smc.eg.utils.ChatUtils;
 import me.Smc.eg.utils.Utils;
+import net.md_5.bungee.api.ChatColor;
 
 public class Veinminer extends Enchant{
 
@@ -36,6 +38,8 @@ public class Veinminer extends Enchant{
 		setOption("maximum-range", "35");
 		setOption("AOE-materials", "COAL_ORE, DIAMOND_ORE, EMERALD_ORE, GLOWING_REDSTONE_ORE, GOLD_ORE, IRON_ORE, LAPIS_ORE, QUARTZ_ORE, REDSTONE_ORE");
 	}
+	
+	ArrayList<Material> allowedMats;
 
 	@Override
 	public void callEvent(ItemStack item, Player player, Entity entity, double value, Block block) {
@@ -88,19 +92,11 @@ public class Veinminer extends Enchant{
 							e.printStackTrace();
 						}
 						List<Block> blocks = v.getVein();
-						ArrayList<Material> mats = new ArrayList<Material>();
-						String[] s = getOption("AOE-materials").split(", ");
-						for(String name : s) {
-							mats.add(Material.getMaterial(name));
-						}
-						Utils.breakCheck(blocks, player, item, loc, mats, true);
+						
+						Utils.breakCheck(blocks, player, item, loc, allowedMats, true);
 						new BukkitRunnable() {
 							public void run() {
-								for(Entity e : Utils.getNearbyEntities(player.getLocation(), getIntOption("maximum-range") + 5)) {
-									if(e.getType().equals(EntityType.DROPPED_ITEM)) {
-										e.teleport(loc);
-									}
-								}
+								Magnet.magnetize(loc, getIntOption("maximum-range") + 5);
 							}
 						}.runTaskLater(Main.plugin, 10);
 					}else {
@@ -127,6 +123,21 @@ public class Veinminer extends Enchant{
 						}
 					}
 				}
+			}
+		}
+	}
+
+	@Override
+	public void startup() {
+		allowedMats = new ArrayList<Material>();
+		String[] s = getOption("AOE-materials").split(", ");
+		Material mat;
+		for(String name : s) {
+			try {
+				mat = Material.getMaterial(name);
+				allowedMats.add(mat);
+			}catch(Exception e) {
+				ChatUtils.messageConsole(ChatColor.RED + name + " is an invalid material name!");
 			}
 		}
 	}

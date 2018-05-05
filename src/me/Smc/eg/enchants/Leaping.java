@@ -51,31 +51,7 @@ public class Leaping extends Enchant{
 	
 	public void addEffect(Player p, ItemStack is) {
 		int level = EnchantManager.getEnchantLevel(is, EnchantManager.getEnchant("leaping"));
-		int i;
-		switch(level) {
-		case 1: 
-		case 2:
-		case 3:
-		case 4:
-		case 5: i = 1; break;
-		case 6:
-		case 7:
-		case 8:
-		case 9:
-		case 10: i = 2; break;
-		case 11:
-		case 12:
-		case 13:
-		case 14:
-		case 15: i = 3; break;
-		case 16:
-		case 17:
-		case 18:
-		case 19:
-		case 20: i = 4; break;
-		default: i = 1;
-		}
-		p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, i - 1));
+		p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, (int) Math.floor(level / 5)));
 		new BukkitRunnable(){
 			public void run(){
 				if(p.getInventory().getLeggings() == null){p.removePotionEffect(PotionEffectType.JUMP); cancel(); return;}
@@ -106,6 +82,12 @@ public class Leaping extends Enchant{
 			}
 		}
 		return i;
+	}
+
+	@Override
+	public void startup() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

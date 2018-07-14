@@ -84,7 +84,6 @@ public class CrystalGUI{
 	 * @param fileConf The file configuration to save it in
 	 */
 	
-	@SuppressWarnings("deprecation")
 	public static void setDefaults(File file, FileConfiguration fileConf){
 		fileConf.options().header("# The Crystal GUI's configuration file. #");
 		fileConf.set("GUI-Title", "&eEnchanting");
@@ -93,8 +92,6 @@ public class CrystalGUI{
 		ItemStack filler = new ItemStack(Material.STAINED_GLASS_PANE);
 		fileConf.set("Filler-Item", Utils.addToIM(filler, " ", new ArrayList<String>()));
 		ArrayList<ItemStack> items = new ArrayList<ItemStack>();
-		items.add(Utils.addToIM(new ItemStack(Material.WOOL, 1, (short) 0, (byte) 1), ChatColor.GREEN + "This is a test", Arrays.asList(ChatColor.BLUE + "Test lore line", ChatColor.RED + "gotta love those")));
-		items.add(Utils.addToIM(new ItemStack(Material.BEDROCK), ChatColor.LIGHT_PURPLE + "This is another", Arrays.asList(ChatColor.BLACK + "Line", ChatColor.DARK_GREEN + "This is more testing stuff")));
 		int i = 0;
 		for(ItemStack item : items){
 			fileConf.set("Added-Item." + i + "-item", item);

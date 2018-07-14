@@ -1,6 +1,7 @@
 package me.Smc.eg.listeners;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -39,8 +40,8 @@ public class InteractEvent implements Listener{
 			if(e.getAction().equals(Action.RIGHT_CLICK_AIR)) {
 				ItemStack is = p.getInventory().getItemInMainHand();
 				if(is != null) {
+					NBTItem nbti = new NBTItem(is);
 					if(EnchantManager.hasEnchant(is, "massbreaker")) {
-						NBTItem nbti = new NBTItem(is);
 						if(nbti.hasKey("massbreaker")) {
 							if(!nbti.getBoolean("massbreaker")) {
 								nbti.setBoolean("massbreaker", true);
@@ -77,7 +78,29 @@ public class InteractEvent implements Listener{
 						p.getInventory().remove(is);
 						p.getInventory().addItem(newItem);
 					}
-					
+					if((is.getItemMeta().hasLore()) && (is.getItemMeta().getLore().contains("Magnet Toggler"))) {
+						ChatColor cc = null;
+						String str = "";
+						if(nbti.getBoolean("status") == false) {
+							nbti.setBoolean("status", true);
+							p.sendMessage(ChatColor.GREEN + "You have enabled Magnet!");
+							cc = ChatColor.GREEN;
+							str = "Enabled";
+						}else if(nbti.getBoolean("status") == true) {
+							nbti.setBoolean("status", false);
+							p.sendMessage(ChatColor.YELLOW + "You have disabled Magnet!");
+							cc = ChatColor.RED;
+							str = "Disabled";
+						}
+						ItemStack newItem = nbti.getItem();
+						ItemMeta im = newItem.getItemMeta();
+						im.setDisplayName(ChatColor.GRAY + "Magnet " + cc + str);
+						newItem.setItemMeta(im);
+						newItem.setAmount(1);
+						p.getInventory().removeItem(is);
+						p.getInventory().addItem(newItem);
+						e.setCancelled(true);
+					}
 				}
 			}
 		}
@@ -98,6 +121,12 @@ public class InteractEvent implements Listener{
 				if(!Cooldowns.isEnchantOnCooldown("veinminer", e.getPlayer())) {
 					if(EnchantManager.hasEnchant(is, "veinminer")) {
 						if(EnchantManager.getEnchantLevel(is, EnchantManager.getEnchant("veinminer")) >= 5) {
+							if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+								ItemStack is2 = p.getInventory().getItemInOffHand();
+								if(!is2.getType().equals(Material.AIR)) {
+									return;
+								}
+							}
 							EnchantManager.callEvent(is, "veinMine", p, null, 1.0, null);
 							Cooldowns.addEnchantCooldown("veinminer", p);
 							new BukkitRunnable() {

@@ -43,9 +43,9 @@ public class DeathEvent implements Listener{
 			 lvl = 3;
 		 }
 		 switch(entity.getType()) {
-		 case ZOMBIE: 
+		 /*case ZOMBIE: 
 		 case ZOMBIE_VILLAGER:
-		 case SKELETON: enc = EnchantManager.getEnchant("purify"); two = 16; break;
+		 case SKELETON: enc = EnchantManager.getEnchant("purify"); two = 16; break;*/
 		 case WITCH: enc = EnchantManager.getEnchant("lifesteal"); two = 16; break;
 		 default: return;
 		 }

@@ -47,7 +47,6 @@ public class Executor implements CommandExecutor{
 		}
 		Player player = (Player) sender;
 		if(cmd.getName().equalsIgnoreCase("eg")) EnchantmentGems.runCommand(player, args);
-		if(cmd.getName().equalsIgnoreCase("map")) player.sendMessage(ChatColor.GREEN + "Here is the map link: " + ChatColor.BLUE + "http://map.plsenjoygame.org");
 		if(cmd.getName().equalsIgnoreCase("trash")) Trash.execute(player);
 		if(cmd.getName().equalsIgnoreCase("sudoku")){
 			ArrayList<String> message = new ArrayList<String>();

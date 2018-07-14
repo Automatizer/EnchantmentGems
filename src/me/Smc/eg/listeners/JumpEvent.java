@@ -35,7 +35,7 @@ public class JumpEvent implements Listener{
                 jumpVelocity += (double) ((float) (player.getPotionEffect(PotionEffectType.JUMP).getAmplifier() + 1) * 0.1F);
             }
             if (e.getPlayer().getLocation().getBlock().getType() != Material.LADDER && prevPlayersOnGround.contains(player.getUniqueId())) {
-                if (!player.isOnGround() && Double.compare(player.getVelocity().getY(), jumpVelocity) == 0 && player.isSneaking()) {
+                if (!player.isOnGround() && Double.compare(player.getVelocity().getY(), jumpVelocity) == 0 && player.isSneaking() && (player.getInventory().getLeggings() != null)) {
                 	EnchantManager.callEvent(player.getInventory().getLeggings(), "onLeap", player, null, 0, null);
                 }
             }

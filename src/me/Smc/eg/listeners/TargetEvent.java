@@ -1,6 +1,7 @@
 package me.Smc.eg.listeners;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,8 +24,10 @@ public class TargetEvent implements Listener{
 	public void onEntityTarget(EntityTargetEvent e) {
 		if(e.getTarget() instanceof Player) {
 			Player p = (Player) e.getTarget();
-			if(EnchantManager.hasEnchant(p.getInventory().getChestplate(), "peaceful") && e.getReason() != TargetReason.TARGET_ATTACKED_ENTITY) {
-				e.setCancelled(true);
+			if((p.getInventory().getChestplate() != null) || (!p.getInventory().getChestplate().getType().equals(Material.AIR))) {
+				if(EnchantManager.hasEnchant(p.getInventory().getChestplate(), "peaceful") && e.getReason() != TargetReason.TARGET_ATTACKED_ENTITY) {
+					e.setCancelled(true);
+				}
 			}
 		}
 	}

@@ -11,6 +11,7 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.material.MaterialData;
 
 import me.Smc.eg.enchants.EnchantManager;
+import me.Smc.eg.enchants.Magnet;
 
 @SuppressWarnings("deprecation")
 public class Recipes{
@@ -24,6 +25,7 @@ public class Recipes{
 		recipes.add(getHasteShardRecipe());
 		recipes.add(getHasteRecipe());
 		recipes.add(getMagnetRecipe());
+		recipes.add(getMagnetTogglerRecipe());
 		return recipes;
 	}
 	
@@ -108,6 +110,25 @@ public class Recipes{
 		recipe.setIngredient('*', Material.QUARTZ);
 		recipe.setIngredient('%', Material.REDSTONE);
 		recipe.setIngredient('^', Material.REDSTONE_BLOCK);
+		return recipe;
+	}
+	
+	public static Recipe getMagnetTogglerRecipe() {
+		ShapedRecipe recipe = new ShapedRecipe(Magnet.getInstance().getToggle());
+		recipe.shape("*%*", "*^*", "***");
+		recipe.setIngredient('*', Material.REDSTONE_BLOCK);
+		recipe.setIngredient('%', Material.LEVER);
+		recipe.setIngredient('^', EnchantManager.getEnchant("magnet").getCrystal().getMaterial());
+		return recipe;
+	}
+	
+	public static Recipe getNightvisionRecipe() {
+		ShapedRecipe recipe = new ShapedRecipe(EnchantManager.getEnchant("nightvision").getCrystal().getItem(1));
+		recipe.shape("***", "%^%", "&&&");
+		recipe.setIngredient('*', Material.DAYLIGHT_DETECTOR);
+		recipe.setIngredient('%', Material.BEACON);
+		recipe.setIngredient('^', Material.GOLDEN_CARROT);
+		recipe.setIngredient('&', Material.GOLD_BLOCK);
 		return recipe;
 	}
 	

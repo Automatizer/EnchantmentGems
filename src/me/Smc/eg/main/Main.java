@@ -66,14 +66,12 @@ public class Main extends JavaPlugin{
 		plugin = this;
 		settings.setup(this);
 		protocolManager = ProtocolLibrary.getProtocolManager();
-		for(Recipe recipe : Recipes.getRecipes()) getServer().addRecipe(recipe);
 		getServer().addRecipe(new FurnaceRecipe(new ItemStack(Material.LEATHER), Material.ROTTEN_FLESH));
 		if(Bukkit.getPluginManager().getPlugin("mcMMO") != null && Bukkit.getPluginManager().getPlugin("mcMMO").isEnabled()) {
 			mcMMO = true;
 		}else {mcMMO = false;}
 		this.getCommand("eg").setExecutor(new Executor());
 		this.getCommand("sudoku").setExecutor(new Executor());
-		this.getCommand("map").setExecutor(new Executor());
 		this.getCommand("trash").setExecutor(new Executor());
 		new BreakEvent(this);
 		new DamageEvent(this);
@@ -100,6 +98,7 @@ public class Main extends JavaPlugin{
 		GTL.startLoops();
 		entityHider = new EntityHider(plugin, Policy.BLACKLIST);
 		EnchantManager.startup();
+		for(Recipe recipe : Recipes.getRecipes()) getServer().addRecipe(recipe);
 		ChatUtils.messageConsole(ChatUtils.addPrefix(settings.getMessage("Plugin-Enabled")));
 	}
 	

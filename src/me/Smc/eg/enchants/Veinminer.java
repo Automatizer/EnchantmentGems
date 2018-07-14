@@ -7,16 +7,13 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.Smc.eg.main.Main;
-import me.Smc.eg.utils.ChatUtils;
 import me.Smc.eg.utils.Utils;
-import net.md_5.bungee.api.ChatColor;
 
 public class Veinminer extends Enchant{
 
@@ -38,8 +35,6 @@ public class Veinminer extends Enchant{
 		setOption("maximum-range", "35");
 		setOption("AOE-materials", "COAL_ORE, DIAMOND_ORE, EMERALD_ORE, GLOWING_REDSTONE_ORE, GOLD_ORE, IRON_ORE, LAPIS_ORE, QUARTZ_ORE, REDSTONE_ORE");
 	}
-	
-	ArrayList<Material> allowedMats;
 
 	@Override
 	public void callEvent(ItemStack item, Player player, Entity entity, double value, Block block) {
@@ -92,11 +87,16 @@ public class Veinminer extends Enchant{
 							e.printStackTrace();
 						}
 						List<Block> blocks = v.getVein();
-						
-						Utils.breakCheck(blocks, player, item, loc, allowedMats, true);
+						List<Material> mats = new ArrayList<Material>();
+						String[] s = getOption("AOE-materials").split(", ");
+						for(String name : s) {
+							Material m = Material.getMaterial(name);
+							mats.add(m);
+						}
+						Utils.breakCheck(blocks, player, item, loc, mats, true);
 						new BukkitRunnable() {
 							public void run() {
-								Magnet.magnetize(loc, getIntOption("maximum-range") + 5);
+								Magnet.getInstance().magnetize(player, getIntOption("maximum-range") + 5);
 							}
 						}.runTaskLater(Main.plugin, 10);
 					}else {
@@ -129,17 +129,7 @@ public class Veinminer extends Enchant{
 
 	@Override
 	public void startup() {
-		allowedMats = new ArrayList<Material>();
-		String[] s = getOption("AOE-materials").split(", ");
-		Material mat;
-		for(String name : s) {
-			try {
-				mat = Material.getMaterial(name);
-				allowedMats.add(mat);
-			}catch(Exception e) {
-				ChatUtils.messageConsole(ChatColor.RED + name + " is an invalid material name!");
-			}
-		}
+		
 	}
 }
 

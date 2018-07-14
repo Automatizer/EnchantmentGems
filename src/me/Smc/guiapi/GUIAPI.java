@@ -5,6 +5,7 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType.SlotType;
@@ -103,9 +104,16 @@ public class GUIAPI implements Listener{
 		Inventory inv = e.getInventory();
 		if(inv.getHolder() instanceof GUI){
 			GUI gui = (GUI) inv.getHolder();
-			if(e.getWhoClicked() instanceof Player){
+			if((e.getWhoClicked() instanceof Player)){
 				Player player = (Player) e.getWhoClicked();
-				if(e.getSlotType().equals(SlotType.OUTSIDE)){gui.closeGUI(player); e.setCancelled(true);}
+				if(e.getSlotType().equals(SlotType.OUTSIDE) || (e.getClick() == ClickType.SHIFT_LEFT)){
+					e.setCancelled(true);
+					new BukkitRunnable() {
+						public void run() {
+							gui.closeGUI(player);
+						}
+					}.runTaskLater(Main.plugin, 1);
+				}
 				else{
 					int index = e.getRawSlot();
 					if(index < inv.getSize()){gui.clickItem(player, index); e.setCancelled(true);}

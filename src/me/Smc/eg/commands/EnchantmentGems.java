@@ -33,7 +33,8 @@ public class EnchantmentGems{
 			player.sendMessage(ChatUtils.addPrefix(message));
 			return;
 		}
-		switch(args[0].toLowerCase()){
+		if(player.hasPermission("eg.admin")) {
+			switch(args[0].toLowerCase()){
 			case "give": 
 				if(args.length < 2 || args.length > 4) player.sendMessage(ChatUtils.addPrefix(settings.getMessage("Invalid-Arguments")));
 				else EGGive.runCommand(player, args);
@@ -62,6 +63,7 @@ public class EnchantmentGems{
 				if(args.length < 2 || args.length > 3) { player.sendMessage(ChatUtils.addPrefix(settings.getMessage("Invalid-Arguments"))); }
 				else EGEnchant.execute(player.getInventory().getItemInMainHand(), EnchantManager.getEnchant(args[1]), Utils.stringToInt(args[2]));
 			default: player.sendMessage(ChatUtils.addPrefix(settings.getMessage("Invalid-Arguments"))); break;
+		}
 		}
 	}
 	

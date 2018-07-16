@@ -1,6 +1,6 @@
 name: EnchantmentGems
 author: Smc
-main: me.Smc.eg.main.Main
+main: me.auto.eg.main.Main
 description: Enchantment Gems
 version: 1.0
 depend: [GUI-API, ItemNBTAPI, ProtocolLib, PacketWrapper, ArmorEquipEvent]

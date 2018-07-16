@@ -20,7 +20,6 @@ public class Recipes{
 		List<Recipe> recipes = new ArrayList<Recipe>();
 		recipes.add(getRepairGemRecipe());
 		recipes.add(getSpeedGemRecipe());
-		recipes.add(getLeapingGemRecipe());
 		recipes.add(getLeapingRecipe());
 		recipes.add(getHasteShardRecipe());
 		recipes.add(getHasteRecipe());
@@ -67,20 +66,10 @@ public class Recipes{
 	public static Recipe getSpeedGemRecipe(){
 		ShapedRecipe recipe = new ShapedRecipe(EnchantManager.getEnchant("flash").getCrystal().getItem(1));
 		recipe.shape("*=*", "-%-", "*=*");
-		recipe.setIngredient('%', Material.CAKE);
+		recipe.setIngredient('%', Material.NETHER_STAR);
 		recipe.setIngredient('-', Material.LAPIS_BLOCK);
 		recipe.setIngredient('*', Material.GHAST_TEAR);
 		recipe.setIngredient('=', Material.SUGAR);
-		return recipe;
-	}
-	
-	public static Recipe getLeapingGemRecipe(){
-		ShapedRecipe recipe = new ShapedRecipe(getLeapingGem());
-		recipe.shape("*=*", "-%-", "*=*");
-		recipe.setIngredient('=', Material.RABBIT_HIDE);
-		recipe.setIngredient('-', Material.LAPIS_BLOCK);
-		recipe.setIngredient('*', Material.FEATHER);
-		recipe.setIngredient('%', Material.RABBIT_FOOT);
 		return recipe;
 	}
 	
@@ -100,8 +89,9 @@ public class Recipes{
 	
 	public static Recipe getHasteRecipe(){
 		ShapedRecipe recipe = new ShapedRecipe(EnchantManager.getEnchant("haste").getCrystal().getItem(1));
-		recipe.shape("***", "***", "***");
+		recipe.shape("***", "*%*", "***");
 		recipe.setIngredient('*', new MaterialData(Material.MONSTER_EGG, (byte) 0));
+		recipe.setIngredient('%', Material.NETHER_STAR);
 		return recipe;
 	}
 	

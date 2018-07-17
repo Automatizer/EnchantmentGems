@@ -67,9 +67,12 @@ public class InteractEvent implements Listener{
 						String append = cc + "[Massbreaker " + str + cc + "]";
 						String name = im.getDisplayName();
 						String newName;
-						if(name.contains("[Massbreaker")) {
+						if((name != null) && (name.contains("[Massbreaker"))) {
 							newName = name.replace(name.substring(name.indexOf("["), name.lastIndexOf("]")), "%placeholder%");
 						}else {
+							if(name == null) {
+								name = is.getType().toString().replace("_", " ");
+							}
 							newName = name + "%placeholder%";
 						}
 						im.setDisplayName(newName.replace("%placeholder%", append));

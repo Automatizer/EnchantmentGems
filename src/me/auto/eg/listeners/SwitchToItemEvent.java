@@ -23,7 +23,6 @@ public class SwitchToItemEvent implements Listener{
 	public void switchToItemEvent(PlayerItemHeldEvent e){
 		if(e.getPreviousSlot() == e.getNewSlot()) return;
 		Player player = e.getPlayer();
-		if(player.hasPotionEffect(PotionEffectType.SLOW_DIGGING)) player.removePotionEffect(PotionEffectType.SLOW_DIGGING);
 		if(player.hasPotionEffect(PotionEffectType.FAST_DIGGING)) player.removePotionEffect(PotionEffectType.FAST_DIGGING);
 		ItemStack item = player.getInventory().getItem(e.getNewSlot());
 		if(item != null) EnchantManager.callEvent(item, "switchToItem", player, null, 0.0, null);

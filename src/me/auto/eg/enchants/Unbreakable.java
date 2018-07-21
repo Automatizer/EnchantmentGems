@@ -6,8 +6,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 public class Unbreakable extends Enchant{
 
@@ -22,7 +20,7 @@ public class Unbreakable extends Enchant{
 		typesAllowed.add("other");
 		
 		displayName = "&7Unbreakable {enchantlevel}";
-		maxLevel = 3;
+		maxLevel = 1;
 		event = "switchToItem";
 		permission = "eg.enchant.unbreakable.#";
 		crystal = new Crystal(this);
@@ -34,9 +32,12 @@ public class Unbreakable extends Enchant{
 
 	@Override
 	public void callEvent(ItemStack item, Player player, Entity target, double value, Block block){
-		int level = EnchantManager.getEnchantLevel(item, this);
-		if(level < 3)
-			player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, Integer.MAX_VALUE, getIntOption("firstMiningFatigueLevel") - getIntOption("miningFatigueOffPerLevel") * (level - 1)));
+		if(EnchantManager.hasEnchant(item, this.name)) {
+			if(EnchantManager.getEnchantLevel(item, this) > 1) {
+				EnchantManager.removeEnchant(this, item);
+				EnchantManager.addEnchantToItem(item, this, 1);
+			}
+		}
 	}
 
 	@Override

@@ -29,7 +29,6 @@ public class EGGive{
 	 * @param args The arguments passed along the command
 	 */
 	
-	@SuppressWarnings("deprecation")
 	public static void runCommand(Player player, String[] args){
 		if(player.hasPermission(settings.getValue("Permission-For-Give-Command")) || player.isOp()){
 			if(args.length == 2){
@@ -49,8 +48,6 @@ public class EGGive{
 				if(!args[1].equalsIgnoreCase("crystal")){
 					if(Material.getMaterial(args[1].toUpperCase()) != null)
 						toGive = Material.getMaterial(args[1].toUpperCase());
-					else if(Material.getMaterial(Utils.stringToInt(args[1])) != null)
-						toGive = Material.getMaterial(Utils.stringToInt(args[1]));
 					if(toGive == null){player.sendMessage(ChatUtils.addPrefix(settings.getMessage("Invalid-Arguments"))); return;}	
 				}else crystal = true;
 				ItemStack itemToGive = null;

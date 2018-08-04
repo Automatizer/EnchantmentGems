@@ -26,8 +26,6 @@ public class Unbreakable extends Enchant{
 		crystal = new Crystal(this);
 		crystal.displayName = "&3Unbreakable {enchantlevel}";
 		crystal.material = new MaterialData(Material.EMERALD);
-		setOption("firstMiningFatigueLevel", "1");
-		setOption("miningFatigueOffPerLevel", "1");
 	}
 
 	@Override

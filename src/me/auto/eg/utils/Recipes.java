@@ -49,7 +49,7 @@ public class Recipes{
 	}
 	
 	public static ItemStack getHasteShard(){
-		ItemStack shard = new ItemStack(Material.MONSTER_EGG);
+		ItemStack shard = new ItemStack(Material.LEGACY_MONSTER_EGG);
 	    List<String> lore = new ArrayList<String>();
 	    lore.add(ChatColor.GOLD + "Imagine this is a shard?");
 	    return EnchantManager.setItemWatermark(Utils.addToIM(shard, ChatColor.DARK_AQUA + "Haste Shard", lore));
@@ -90,7 +90,7 @@ public class Recipes{
 	public static Recipe getHasteRecipe(){
 		ShapedRecipe recipe = new ShapedRecipe(EnchantManager.getEnchant("haste").getCrystal().getItem(1));
 		recipe.shape("***", "*%*", "***");
-		recipe.setIngredient('*', new MaterialData(Material.MONSTER_EGG, (byte) 0));
+		recipe.setIngredient('*', new MaterialData(Material.LEGACY_MONSTER_EGG, (byte) 0));
 		recipe.setIngredient('%', Material.NETHER_STAR);
 		return recipe;
 	}

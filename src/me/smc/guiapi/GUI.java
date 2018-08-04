@@ -139,10 +139,9 @@ public abstract class GUI implements InventoryHolder{
 	 * @return True if removed, false if it it was already empty
 	 */
 	
-	@SuppressWarnings("deprecation")
 	public boolean removeGUIItem(int index) {
 		ItemStack slot = getInventory().getItem(index);
-		if(slot == null || slot.getTypeId() == 0) return false;
+		if(slot == null || slot.getType() == Material.AIR) return false;
 		getInventory().clear(index);
 		items.remove(index).removeFromGUI(this);
 		return true;

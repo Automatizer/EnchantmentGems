@@ -1,8 +1,6 @@
 package me.auto.eg.listeners;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFromToEvent;
@@ -19,10 +17,7 @@ public class BlockChange implements Listener{
 	
 	@EventHandler
 	public void onChange(BlockFromToEvent e) {
-		Block to = e.getToBlock();
-		if(to.getType() == Material.GLOWING_REDSTONE_ORE) {
-			to.setType(Material.REDSTONE_ORE);
-		}
+		
 	}
 	
 }

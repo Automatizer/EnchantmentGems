@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 import org.bukkit.potion.PotionEffectType;
 
+@SuppressWarnings("deprecation")
 public class Leaping extends Enchant{
 	
 	public Leaping(){
@@ -64,7 +65,7 @@ public class Leaping extends Enchant{
 	}
 	
 	private void jump(Player p, int i) {
-		FallingBlock fb = p.getWorld().spawnFallingBlock(p.getEyeLocation(), new MaterialData(Material.PISTON_MOVING_PIECE));
+		FallingBlock fb = p.getWorld().spawnFallingBlock(p.getEyeLocation(), new MaterialData(Material.MOVING_PISTON));
 		fb.setVelocity(p.getLocation().getDirection().multiply((getDoubleOption("default-leaping-strength")) + (i / getDoubleOption("velocity-divider"))));
 		fb.addPassenger(p);
 		p.playSound(p.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 1);

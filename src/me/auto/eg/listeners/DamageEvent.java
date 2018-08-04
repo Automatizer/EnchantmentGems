@@ -1,5 +1,6 @@
 package me.auto.eg.listeners;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -44,7 +45,7 @@ public class DamageEvent implements Listener{
 	public void takeDamageEvent(EntityDamageEvent e){
 		if(e.getEntity() instanceof Player){
 			Player player = (Player) e.getEntity();
-			if(e.getCause().equals(DamageCause.FALL) && EnchantManager.hasEnchant(player.getInventory().getLeggings(), "leaping")) {
+			if(e.getCause().equals(DamageCause.FALL) && (player.getInventory().getLeggings() != null) && (!player.getInventory().getLeggings().getType().equals(Material.AIR)) && EnchantManager.hasEnchant(player.getInventory().getLeggings(), "leaping")) {
 				e.setCancelled(true);
 			}
 		}

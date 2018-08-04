@@ -3,8 +3,9 @@ author: Smc
 main: me.auto.eg.main.Main
 description: Enchantment Gems
 version: 1.0
-depend: [GUI-API, ItemNBTAPI, ProtocolLib, PacketWrapper, ArmorEquipEvent]
+depend: [GUI-API, ItemNBTAPI, ProtocolLib, PacketWrapper, ArmorEquipEvent, PermissionsEx, KeepItems]
 softdepend: [mcMMO]
+api-version: 1.13
 commands:
     eg:
         usage: /<command>

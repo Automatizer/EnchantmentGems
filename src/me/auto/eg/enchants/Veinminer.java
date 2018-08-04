@@ -15,6 +15,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import me.auto.eg.main.Main;
 import me.auto.eg.utils.Utils;
 
+@SuppressWarnings("deprecation")
 public class Veinminer extends Enchant{
 
 	public Veinminer() {
@@ -43,7 +44,6 @@ public class Veinminer extends Enchant{
 				if(EnchantManager.getEnchantLevel(item, this) < getIntOption("required-level-for-AOE")) {
 					if(Utils.isOre(block)) {
 						Material mat = block.getType();
-						if(mat == Material.GLOWING_REDSTONE_ORE) mat = Material.REDSTONE_ORE;
 						Location loc = block.getLocation();
 						final VeinScanner v = new VeinScanner(block, block.getLocation(), getIntOption("maximum-range"));
 						Thread t = new Thread("Vein Scanner") {
@@ -66,11 +66,11 @@ public class Veinminer extends Enchant{
 					if(value == 1.0) {
 						Location loc = player.getLocation();
 						List<Block> list = Utils.getNearbyBlocks(loc, (int) Math.floor(EnchantManager.getEnchantLevel(item, this) * getDoubleOption("AOE-range-multiplier")));
+						String[] s = getOption("AOE-materials").split(", ");
+						List<String> names = new ArrayList<String>();
+						for(String name : s) { names.add(name); }
 						for(Block b : new ArrayList<>(list)) {
-							if(b.getType() == Material.GLOWING_REDSTONE_ORE) {
-								b.setType(Material.REDSTONE_ORE);
-							}
-							if(!Utils.isOre(b)) {
+							if(!names.contains(b.getType().name())) {
 								list.remove(b);
 							}
 						}
@@ -88,7 +88,6 @@ public class Veinminer extends Enchant{
 						}
 						List<Block> blocks = v.getVein();
 						List<Material> mats = new ArrayList<Material>();
-						String[] s = getOption("AOE-materials").split(", ");
 						for(String name : s) {
 							Material m = Material.getMaterial(name);
 							mats.add(m);
@@ -102,7 +101,6 @@ public class Veinminer extends Enchant{
 					}else {
 						if(Utils.isOre(block)) {
 							Material mat = block.getType();
-							if(mat == Material.GLOWING_REDSTONE_ORE) block.setType(Material.REDSTONE_ORE);
 							Location loc = block.getLocation();
 							final VeinScanner v = new VeinScanner(block, block.getLocation(), getIntOption("maximum-range"));
 							Thread t = new Thread("Vein Scanner") {
@@ -167,8 +165,6 @@ class VeinScanner{
 			for(Block b : Utils.getAdjacentBlocks(initial)) {
 				Material mat = b.getType();
 				Material iniMat = initial.getType();
-				if(mat == Material.GLOWING_REDSTONE_ORE) mat = Material.REDSTONE_ORE;
-				if(iniMat == Material.GLOWING_REDSTONE_ORE) iniMat = Material.REDSTONE_ORE;
 				if(mat == iniMat) {
 					vein.add(b);
 				}
@@ -179,8 +175,6 @@ class VeinScanner{
 			List<Block> copy = new ArrayList<>(vein);
 			for(Block b : copy) {
 				for(Block bl : Utils.getAdjacentBlocks(b)) {
-					Material mat = bl.getType();
-					if(mat == Material.GLOWING_REDSTONE_ORE) mat = Material.REDSTONE_ORE;
 					if(bl.getType() == b.getType() && !vein.contains(bl) && (bl.getLocation().distance(initialLoc) < range)) {
 						vein.add(bl);
 					}

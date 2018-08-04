@@ -2,6 +2,7 @@ package me.auto.eg.enchants;
 
 import java.lang.reflect.Field;
 
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.enchantments.EnchantmentWrapper;
@@ -11,8 +12,8 @@ public class EnchantGlow extends EnchantmentWrapper{
 
 	private static Enchantment glow;
 
-	public EnchantGlow(int id){
-		super(id);
+	public EnchantGlow(String namespacedKey){
+		super(namespacedKey);
 	}
 
 	@Override
@@ -45,7 +46,6 @@ public class EnchantGlow extends EnchantmentWrapper{
 		return 1;
 	}
 
-	@SuppressWarnings("deprecation")
 	public static Enchantment getGlow(){
 		if(glow != null) return glow;
 		try{
@@ -53,8 +53,8 @@ public class EnchantGlow extends EnchantmentWrapper{
 			f.setAccessible(true);
 			f.set(null, true);
 		}catch(Exception e){e.printStackTrace();}
-		glow = new EnchantGlow(255);
-		if(Enchantment.getById(255) == null) Enchantment.registerEnchantment(glow);
+		glow = new EnchantGlow("glow");
+		if(Enchantment.getByKey(NamespacedKey.minecraft("glow")) == null) Enchantment.registerEnchantment(glow);
 		return glow;
 	}
 

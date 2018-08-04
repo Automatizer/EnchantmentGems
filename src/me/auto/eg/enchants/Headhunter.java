@@ -18,6 +18,7 @@ public class Headhunter extends Enchant{
 		super("headhunter");
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void setDefaults(){
 		typesAllowed.add("sword"); typesAllowed.add("axe");
@@ -41,7 +42,8 @@ public class Headhunter extends Enchant{
 			boolean canFire = Utils.randomBetween(0, 100) <= hitPercentage ? true : false;
 			if(canFire){
 				Player target = (Player) entity;
-		    	ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
+		    	@SuppressWarnings("deprecation")
+				ItemStack skull = new ItemStack(Material.LEGACY_SKULL_ITEM, 1, (short) 3);
 		        SkullMeta meta = (SkullMeta) skull.getItemMeta();
 		        meta.setDisplayName(String.format(Settings.getInstance().getMessage("Player-Head-Title-Format"), target.getName()));
 		        meta.setOwningPlayer(target);

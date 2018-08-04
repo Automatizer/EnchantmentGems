@@ -11,7 +11,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import de.tr7zw.itemnbtapi.NBTItem;
 import me.auto.eg.enchants.EnchantManager;
 import me.auto.eg.utils.Cooldowns;
 import me.auto.eg.utils.Utils;
@@ -35,12 +34,12 @@ public class BreakEvent implements Listener{
 		int level = 0;
 		ItemStack is = player.getInventory().getItemInMainHand();
 		boolean b = is.containsEnchantment(Enchantment.SILK_TOUCH);
-		NBTItem nbti = new NBTItem(is);
-		if(nbti.hasKey("massbreaker")) {
+		/*NBTItem nbti = new NBTItem(is);
+		if((is != null) && (!is.getType().equals(Material.AIR)) && (nbti != null) && nbti.hasKey("massbreaker")) {
 			if(nbti.getBoolean("massbreaker")) {
 				EnchantManager.callEvent(is, "blockBreak", player, null, 0, block);
 			}
-		}
+		}*/
 		if(Utils.isOre(block)) {
 			if(!Cooldowns.isEnchantOnCooldown("veinminer", player)) {
 				if(EnchantManager.hasEnchant(is, "veinminer")) {
@@ -69,7 +68,6 @@ public class BreakEvent implements Listener{
 					level = 1;
 				}
 				break;
-			case GLOWING_REDSTONE_ORE:
 			case REDSTONE_ORE:
 				int random2 = Utils.randomBetween(0, 10000);
 				enchant = "magnet";

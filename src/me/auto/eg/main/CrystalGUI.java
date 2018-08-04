@@ -88,7 +88,7 @@ public class CrystalGUI{
 		fileConf.set("GUI-Title", "&eEnchanting");
 		fileConf.set("GUI-Rows", 3);
 		fileConf.set("Fill-in-empty-slots", true);
-		ItemStack filler = new ItemStack(Material.STAINED_GLASS_PANE);
+		ItemStack filler = new ItemStack(Material.WHITE_STAINED_GLASS_PANE);
 		fileConf.set("Filler-Item", Utils.addToIM(filler, " ", new ArrayList<String>()));
 		ArrayList<ItemStack> items = new ArrayList<ItemStack>();
 		int i = 0;

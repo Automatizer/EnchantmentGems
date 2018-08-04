@@ -13,6 +13,7 @@ import org.bukkit.material.MaterialData;
 import de.tr7zw.itemnbtapi.NBTItem;
 import me.auto.eg.utils.Utils;
 
+@SuppressWarnings("deprecation")
 public class Massbreaker extends Enchant{
 
 	public Massbreaker() {
@@ -38,9 +39,7 @@ public class Massbreaker extends Enchant{
 				blacklist.add(Material.AIR);
 				blacklist.add(Material.BEDROCK);
 				blacklist.add(Material.WATER);
-				blacklist.add(Material.STATIONARY_WATER);
 				blacklist.add(Material.LAVA);
-				blacklist.add(Material.STATIONARY_LAVA);
 				Utils.breakCheck(getBlocks(block.getLocation(), EnchantManager.getEnchantLevel(item, this)), player, item, block.getLocation(), blacklist, false);
 			}
 		}

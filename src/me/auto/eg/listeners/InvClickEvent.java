@@ -78,7 +78,6 @@ public class InvClickEvent implements Listener{
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	@EventHandler
 	public static void onInventoryClick(InventoryClickEvent e){
 		if(!e.isCancelled()){
@@ -93,8 +92,8 @@ public class InvClickEvent implements Listener{
 						ItemStack item1 = items[0];
 						ItemStack item2 = items[1];
 						if(item1 != null && item2 != null){
-							int id2 = item2.getTypeId();
-							if(id2 == Material.ENCHANTED_BOOK.getId() || id2 == Material.BOOK.getId()){
+							Material id2 = item2.getType();
+							if(id2 == Material.ENCHANTED_BOOK || id2 == Material.BOOK){
 								ItemStack item3 = e.getCurrentItem();
 								if(item3 != null){
 									ItemMeta meta = item3.getItemMeta();

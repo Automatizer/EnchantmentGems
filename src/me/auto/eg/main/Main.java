@@ -13,6 +13,7 @@ import com.comphenix.protocol.ProtocolManager;
 
 import me.auto.eg.commands.Executor;
 import me.auto.eg.enchants.EnchantManager;
+import me.auto.eg.listeners.BlockChange;
 import me.auto.eg.listeners.BreakEvent;
 import me.auto.eg.listeners.DamageEvent;
 import me.auto.eg.listeners.DeathEvent;
@@ -28,16 +29,17 @@ import me.auto.eg.listeners.JoinEvent;
 import me.auto.eg.listeners.JumpEvent;
 import me.auto.eg.listeners.LoginEvent;
 import me.auto.eg.listeners.MoveEvent;
+import me.auto.eg.listeners.PlayerRespawn;
 import me.auto.eg.listeners.SneakEvent;
 import me.auto.eg.listeners.SwitchToItemEvent;
 import me.auto.eg.listeners.TargetEvent;
 import me.auto.eg.listeners.WeatherEvent;
 import me.auto.eg.utils.ChatUtils;
 import me.auto.eg.utils.EntityHider;
+import me.auto.eg.utils.EntityHider.Policy;
 import me.auto.eg.utils.GTL;
 import me.auto.eg.utils.Recipes;
 import me.auto.eg.utils.Settings;
-import me.auto.eg.utils.EntityHider.Policy;
 import me.smc.guiapi.GUIAPI;
 
 /**
@@ -62,6 +64,7 @@ public class Main extends JavaPlugin{
 	 */
 	
 	//@SuppressWarnings("deprecation")
+	@SuppressWarnings("deprecation")
 	public void onEnable(){
 		plugin = this;
 		settings.setup(this);
@@ -94,7 +97,8 @@ public class Main extends JavaPlugin{
 		new TargetEvent(this);
 		new EntityChangeBlock(this);
 		new ItemPickup(this);
-		//new BlockChange(this);
+		new PlayerRespawn(this);
+		new BlockChange(this);
 		GTL.startLoops();
 		entityHider = new EntityHider(plugin, Policy.BLACKLIST);
 		EnchantManager.startup();

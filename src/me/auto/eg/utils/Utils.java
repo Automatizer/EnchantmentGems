@@ -12,7 +12,6 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.BlockState;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -270,10 +269,9 @@ public class Utils{
 		case GOLD_ORE: return true;
 		case DIAMOND_ORE: return true;
 		case EMERALD_ORE: return true;
-		case GLOWING_REDSTONE_ORE: return true;
 		case REDSTONE_ORE: return true;
 		case LAPIS_ORE: return true;
-		case QUARTZ_ORE: return true;
+		case NETHER_QUARTZ_ORE: return true;
 		default: return false;
 		}
 	}
@@ -290,8 +288,8 @@ public class Utils{
 			}else manager.applyXpGain(Mining.getBlockXp(b.getState()), XPGainReason.PVE);
 		}
 		if(item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)) {
-			BlockState bs = b.getState();
-			ItemStack is = new ItemStack(bs.getData().toItemStack(1));
+			
+			ItemStack is = new ItemStack(b.getType());
 			if(!bool) b.getWorld().dropItem(loc, is);
 			b.setType(Material.AIR);
 		}else {
@@ -303,21 +301,18 @@ public class Utils{
     }
     
     public static void breakCheck(List<Block> blocks, Player p, ItemStack is, Location loc, List<Material> blacklist, boolean blacklistType) {
-    	boolean bool = false;
     	if(is.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)) {
 			for(Block b : blocks) {
 				if(blacklist.contains(b.getType()) == blacklistType) {
-					BlockState bs = b.getState();
 					if(Main.mcMMO) {
 						McMMOPlayer mp = UserManager.getPlayer(p);
 						MiningManager manager = mp.getMiningManager();
 						if((Utils.isOre(b)) && (blacklist.contains(b.getType()) == blacklistType)) { 
 							manager.miningBlockCheck(b.getState());
-							bool = true;
 						}else manager.applyXpGain(Mining.getBlockXp(b.getState()), XPGainReason.PVE);
 					}
-					ItemStack item = new ItemStack(bs.getData().toItemStack(1));
-					if(!bool) b.getWorld().dropItem(loc, item);
+					ItemStack item = new ItemStack(b.getType());
+					b.getWorld().dropItem(loc, item);
 					b.setType(Material.AIR);
 				}
 			}
@@ -329,10 +324,10 @@ public class Utils{
 						MiningManager manager = mp.getMiningManager();
 						if((Utils.isOre(b)) && (blacklist.contains(b.getType()) == blacklistType)) { 
 							manager.miningBlockCheck(b.getState());
-							bool = true;
 						}else manager.applyXpGain(Mining.getBlockXp(b.getState()), XPGainReason.PVE);
 					}
 					b.breakNaturally();
+					p.giveExp(1);
 				}
 			}
 		}

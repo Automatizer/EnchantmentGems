@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 
 import me.auto.eg.utils.ChatUtils;
 import me.auto.eg.utils.Settings;
-import net.md_5.bungee.api.ChatColor;
 
 /**
  * This class handles command execution.

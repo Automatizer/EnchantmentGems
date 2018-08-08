@@ -1,5 +1,7 @@
 package me.auto.eg.commands;
 
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import me.auto.eg.enchants.EnchantManager;
@@ -39,6 +41,16 @@ public class EnchantmentGems{
 				if(args.length < 2 || args.length > 4) player.sendMessage(ChatUtils.addPrefix(settings.getMessage("Invalid-Arguments")));
 				else EGGive.runCommand(player, args);
 				break;
+			case "fix":
+				int i = 0;
+				for(Block b : Utils.getNearbyBlocks(player.getLocation(), 15)) {
+					if(b.getBlockData().getMaterial().equals(Material.MOVING_PISTON)) {
+						b.setType(Material.AIR);
+						i++;
+					}
+				}
+				player.sendMessage(ChatUtils.addPrefix("Removed " + Integer.toString(i) + " corrupted blocks."));
+				break;
 			case "list":
 				if(args.length != 1) player.sendMessage(ChatUtils.addPrefix(settings.getMessage("Invalid-Arguments")));
 				else EGList.runCommand(player);
@@ -62,6 +74,7 @@ public class EnchantmentGems{
 			case "enchant":
 				if(args.length < 2 || args.length > 3) { player.sendMessage(ChatUtils.addPrefix(settings.getMessage("Invalid-Arguments"))); }
 				else EGEnchant.execute(player.getInventory().getItemInMainHand(), EnchantManager.getEnchant(args[1]), Utils.stringToInt(args[2]));
+				break;
 			default: player.sendMessage(ChatUtils.addPrefix(settings.getMessage("Invalid-Arguments"))); break;
 		}
 		}

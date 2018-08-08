@@ -57,14 +57,14 @@ public class BreakEvent implements Listener{
 			case DIAMOND_ORE: 
 				int random = Utils.randomBetween(0, 10000);
 				enchant = "unbreakable";
-				if(random >= 150 && random < 201){ //0.5%
+				if(random >= 0 && random < 201){ //2%
 					level = 1;
 				}
 				break;
 			case EMERALD_ORE: 
 				int random1 = Utils.randomBetween(0, 10000);
 				enchant = "unbreakable";
-				if(random1 >= 150 && random1 < 201){ //0.5%
+				if(random1 >= 0 && random1 < 201){ //2%
 					level = 1;
 				}
 				break;

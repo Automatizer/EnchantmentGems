@@ -24,6 +24,7 @@ import me.auto.eg.listeners.HungerEvent;
 import me.auto.eg.listeners.InteractEvent;
 import me.auto.eg.listeners.InvClickEvent;
 import me.auto.eg.listeners.ItemDamageEvent;
+import me.auto.eg.listeners.ItemEnchant;
 import me.auto.eg.listeners.ItemPickup;
 import me.auto.eg.listeners.JoinEvent;
 import me.auto.eg.listeners.JumpEvent;
@@ -99,6 +100,7 @@ public class Main extends JavaPlugin{
 		new ItemPickup(this);
 		new PlayerRespawn(this);
 		new BlockChange(this);
+		new ItemEnchant(this);
 		GTL.startLoops();
 		entityHider = new EntityHider(plugin, Policy.BLACKLIST);
 		EnchantManager.startup();

@@ -17,6 +17,7 @@ import org.bukkit.material.MaterialData;
 import de.tr7zw.itemnbtapi.NBTItem;
 import me.auto.eg.utils.Utils;
 
+@SuppressWarnings("deprecation")
 public class Magnet extends Enchant{
 	
 	private static Magnet instance = null;
@@ -104,13 +105,15 @@ public class Magnet extends Enchant{
 				return;
 			}
 		}
-		Location loc = p.getLocation();
-		for(Entity entity : Utils.getNearbyEntities(loc, range)) {
-			if((entity instanceof Item) || (entity instanceof ExperienceOrb)){
-				entity.teleport(loc);
-				if(entity instanceof Item) {
-					Item i = (Item) entity;
-					i.setPickupDelay(0);
+		if(p.getInventory().firstEmpty() != -1) {
+			Location loc = p.getLocation();
+			for(Entity entity : Utils.getNearbyEntities(loc, range)) {
+				if((entity instanceof Item) || (entity instanceof ExperienceOrb)){
+					entity.teleport(loc);
+					if(entity instanceof Item) {
+						Item i = (Item) entity;
+						i.setPickupDelay(0);
+					}
 				}
 			}
 		}

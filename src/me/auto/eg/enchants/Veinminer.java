@@ -34,14 +34,15 @@ public class Veinminer extends Enchant{
 		setOption("required-level-for-AOE", "5");
 		setOption("AOE-range-multiplier", "1.5");
 		setOption("maximum-range", "35");
-		setOption("AOE-materials", "COAL_ORE, DIAMOND_ORE, EMERALD_ORE, GLOWING_REDSTONE_ORE, GOLD_ORE, IRON_ORE, LAPIS_ORE, QUARTZ_ORE, REDSTONE_ORE");
+		setOption("AOE-materials", "COAL_ORE, DIAMOND_ORE, EMERALD_ORE, GLOWING_REDSTONE_ORE, GOLD_ORE, IRON_ORE, LAPIS_ORE, NETHER_QUARTZ_ORE, REDSTONE_ORE");
+		setOption("veinmine-sneak-mode", "true");
 	}
 
 	@Override
 	public void callEvent(ItemStack item, Player player, Entity entity, double value, Block block) {
-		if(!player.isSneaking()) {
-			if(EnchantManager.hasEnchant(item, this.name)) {
-				if(EnchantManager.getEnchantLevel(item, this) < getIntOption("required-level-for-AOE")) {
+		if(EnchantManager.hasEnchant(item, this.name)) {
+			if(EnchantManager.getEnchantLevel(item, this) < getIntOption("required-level-for-AOE")) {
+				if(getBooleanOption("veinmine-sneak-mode") == player.isSneaking()) {
 					if(Utils.isOre(block)) {
 						Material mat = block.getType();
 						Location loc = block.getLocation();
@@ -62,43 +63,45 @@ public class Veinminer extends Enchant{
 						mats.add(mat);
 						Utils.breakCheck(blocks, player, item, loc, mats, true);
 					}
-				}else if(EnchantManager.getEnchantLevel(item, this) >= getIntOption("requiredlevel-for-AOE")) {
-					if(value == 1.0) {
-						Location loc = player.getLocation();
-						List<Block> list = Utils.getNearbyBlocks(loc, (int) Math.floor(EnchantManager.getEnchantLevel(item, this) * getDoubleOption("AOE-range-multiplier")));
-						String[] s = getOption("AOE-materials").split(", ");
-						List<String> names = new ArrayList<String>();
-						for(String name : s) { names.add(name); }
-						for(Block b : new ArrayList<>(list)) {
-							if(!names.contains(b.getType().name())) {
-								list.remove(b);
-							}
+				}
+			}else if(EnchantManager.getEnchantLevel(item, this) >= getIntOption("requiredlevel-for-AOE")) {
+				if(value == 1.0) {
+					Location loc = player.getLocation();
+					List<Block> list = Utils.getNearbyBlocks(loc, (int) Math.floor(EnchantManager.getEnchantLevel(item, this) * getDoubleOption("AOE-range-multiplier")));
+					String[] s = getOption("AOE-materials").split(", ");
+					List<String> names = new ArrayList<String>();
+					for(String name : s) { names.add(name); }
+					for(Block b : new ArrayList<>(list)) {
+						if(!names.contains(b.getType().name())) {
+							list.remove(b);
 						}
-						final VeinScanner v = new VeinScanner(list, player.getLocation(), getIntOption("maximum-range"));
-						Thread t = new Thread("Vein Scanner") {
-							public void run() {
-								v.start(true);
-							}
-						};
-						t.start();
-						try {
-							t.join();
-						} catch (InterruptedException e) {
-							e.printStackTrace();
+					}
+					final VeinScanner v = new VeinScanner(list, player.getLocation(), getIntOption("maximum-range"));
+					Thread t = new Thread("Vein Scanner") {
+						public void run() {
+							v.start(true);
 						}
-						List<Block> blocks = v.getVein();
-						List<Material> mats = new ArrayList<Material>();
-						for(String name : s) {
-							Material m = Material.getMaterial(name);
-							mats.add(m);
+					};
+					t.start();
+					try {
+						t.join();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					List<Block> blocks = v.getVein();
+					List<Material> mats = new ArrayList<Material>();
+					for(String name : s) {
+						Material m = Material.getMaterial(name);
+						mats.add(m);
+					}
+					Utils.breakCheck(blocks, player, item, loc, mats, true);
+					new BukkitRunnable() {
+						public void run() {
+							Magnet.getInstance().magnetize(player, getIntOption("maximum-range") + 5);
 						}
-						Utils.breakCheck(blocks, player, item, loc, mats, true);
-						new BukkitRunnable() {
-							public void run() {
-								Magnet.getInstance().magnetize(player, getIntOption("maximum-range") + 5);
-							}
-						}.runTaskLater(Main.plugin, 10);
-					}else {
+					}.runTaskLater(Main.plugin, 10);
+				}else {
+					if(getBooleanOption("veinmine-sneak-mode") == player.isSneaking()) {
 						if(Utils.isOre(block)) {
 							Material mat = block.getType();
 							Location loc = block.getLocation();
@@ -123,6 +126,7 @@ public class Veinminer extends Enchant{
 				}
 			}
 		}
+		
 	}
 
 	@Override

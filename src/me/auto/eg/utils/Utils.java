@@ -134,7 +134,7 @@ public class Utils{
 		if(matName.contains("hoe")) return "hoe";
 		if(matName.contains("axe") && !matName.contains("pickaxe")) return "axe";
 		if(matName.contains("sword")) return "sword";
-		if(matName.contains("spade")) return "shovel";
+		if(matName.contains("shovel")) return "shovel";
 		if(matName.contains("pickaxe")) return "pickaxe";
 		if(matName.contains("bow")) return "bow";
 		if(matName.contains("helmet")) return "helmet";
@@ -326,11 +326,25 @@ public class Utils{
 							manager.miningBlockCheck(b.getState());
 						}else manager.applyXpGain(Mining.getBlockXp(b.getState()), XPGainReason.PVE);
 					}
+					p.giveExp(getBlockExp(b));
 					b.breakNaturally();
-					p.giveExp(1);
 				}
 			}
 		}
+    }
+    
+    public static int getBlockExp(Block block) {
+    	switch(block.getType()) {
+    	case EMERALD_ORE: return 5;
+    	case DIAMOND_ORE:
+    	case LAPIS_ORE: return 3;
+    	case REDSTONE_ORE:
+    	case NETHER_QUARTZ_ORE: return 2;
+    	case COAL_ORE: return 1;
+    	case IRON_ORE: 
+    	case GOLD_ORE:
+    	default: return 0;
+    	}
     }
 	
 }

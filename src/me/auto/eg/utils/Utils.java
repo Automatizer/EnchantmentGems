@@ -276,30 +276,6 @@ public class Utils{
 		}
 	}
     
-    @Deprecated
-    public static void breakCheck(Block b, Player player, ItemStack item, Location loc) {
-    	boolean bool = false;
-		if(Main.mcMMO) {
-			McMMOPlayer mp = UserManager.getPlayer(player);
-			MiningManager manager = mp.getMiningManager();
-			if(Utils.isOre(b)) { 
-				manager.miningBlockCheck(b.getState());
-				bool = true;
-			}else manager.applyXpGain(Mining.getBlockXp(b.getState()), XPGainReason.PVE);
-		}
-		if(item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)) {
-			
-			ItemStack is = new ItemStack(b.getType());
-			if(!bool) b.getWorld().dropItem(loc, is);
-			b.setType(Material.AIR);
-		}else {
-			for(ItemStack i : b.getDrops()) {
-				b.getWorld().dropItem(loc, i);
-			}
-			b.setType(Material.AIR);
-		}
-    }
-    
     public static void breakCheck(List<Block> blocks, Player p, ItemStack is, Location loc, List<Material> blacklist, boolean blacklistType) {
     	if(is.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)) {
 			for(Block b : blocks) {
@@ -307,9 +283,7 @@ public class Utils{
 					if(Main.mcMMO) {
 						McMMOPlayer mp = UserManager.getPlayer(p);
 						MiningManager manager = mp.getMiningManager();
-						if((Utils.isOre(b)) && (blacklist.contains(b.getType()) == blacklistType)) { 
-							manager.miningBlockCheck(b.getState());
-						}else manager.applyXpGain(Mining.getBlockXp(b.getState()), XPGainReason.PVE);
+						manager.applyXpGain(Mining.getBlockXp(b.getState()) / 10, XPGainReason.PVE);
 					}
 					ItemStack item = new ItemStack(b.getType());
 					b.getWorld().dropItem(loc, item);
@@ -322,9 +296,7 @@ public class Utils{
 					if(Main.mcMMO) {
 						McMMOPlayer mp = UserManager.getPlayer(p);
 						MiningManager manager = mp.getMiningManager();
-						if((Utils.isOre(b)) && (blacklist.contains(b.getType()) == blacklistType)) { 
-							manager.miningBlockCheck(b.getState());
-						}else manager.applyXpGain(Mining.getBlockXp(b.getState()), XPGainReason.PVE);
+						manager.applyXpGain(Mining.getBlockXp(b.getState()) / 10, XPGainReason.PVE);
 					}
 					p.giveExp(getBlockExp(b));
 					b.breakNaturally();

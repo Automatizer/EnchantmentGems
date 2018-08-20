@@ -12,6 +12,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.auto.eg.enchants.EnchantManager;
+import me.auto.eg.enchants.Veinminer;
 import me.auto.eg.utils.Cooldowns;
 import me.auto.eg.utils.Utils;
 
@@ -40,9 +41,12 @@ public class BreakEvent implements Listener{
 				EnchantManager.callEvent(is, "blockBreak", player, null, 0, block);
 			}
 		}*/
-		if(Utils.isOre(block)) {
+		if(Veinminer.getMats().contains(type)) {
 			if(!Cooldowns.isEnchantOnCooldown("veinminer", player)) {
 				if(EnchantManager.hasEnchant(is, "veinminer")) {
+					if(Veinminer.getInstance().works(player)) {
+						e.setCancelled(true);
+					}
 					EnchantManager.callEvent(is, "veinMine", player, null, 0, block);
 					Cooldowns.addEnchantCooldown("veinminer", player);
 					new BukkitRunnable() {
@@ -57,7 +61,7 @@ public class BreakEvent implements Listener{
 			case DIAMOND_ORE: 
 				int random = Utils.randomBetween(0, 10000);
 				enchant = "unbreakable";
-				if(random >= 0 && random < 201){ //2%
+				if(random >= 0 && random < 101){ //1%
 					level = 1;
 				}
 				break;

@@ -223,7 +223,7 @@ public class EnchantManager{
 		enchants.add(new Headhunter());
 		enchants.add(new Leaping());
 		enchants.add(new Lifesteal());
-		enchants.add(new Magnet());
+		enchants.add(Magnet.getInstance());
 		enchants.add(new Nightvision());
 		enchants.add(new Poison());
 		enchants.add(new Purify());
@@ -232,7 +232,7 @@ public class EnchantManager{
 		enchants.add(new Starvation());
 		enchants.add(new Unbreakable());
 		enchants.add(new Massbreaker());
-		enchants.add(new Veinminer());
+		enchants.add(Veinminer.getInstance());
 		enchants.add(new Peaceful());
 		enchants.add(new KeepInv());
 		return enchants;

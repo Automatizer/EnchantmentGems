@@ -17,6 +17,15 @@ import me.auto.eg.utils.Utils;
 
 @SuppressWarnings("deprecation")
 public class Veinminer extends Enchant{
+	
+	private static Veinminer instance = null;
+	
+	public static Veinminer getInstance() {
+		if(instance == null) {
+			instance = new Veinminer();
+		}
+		return instance;
+	}
 
 	public Veinminer() {
 		super("veinminer");
@@ -33,16 +42,18 @@ public class Veinminer extends Enchant{
 		crystal.material = new MaterialData(Material.EMERALD);
 		setOption("required-level-for-AOE", "5");
 		setOption("AOE-range-multiplier", "1.5");
-		setOption("maximum-range", "35");
+		setOption("maximum-blocks", "500");
 		setOption("AOE-materials", "COAL_ORE, DIAMOND_ORE, EMERALD_ORE, GLOWING_REDSTONE_ORE, GOLD_ORE, IRON_ORE, LAPIS_ORE, NETHER_QUARTZ_ORE, REDSTONE_ORE");
 		setOption("veinmine-sneak-mode", "true");
 	}
+	
+	private static List<Material> mats = new ArrayList<Material>();
 
 	@Override
 	public void callEvent(ItemStack item, Player player, Entity entity, double value, Block block) {
 		if(EnchantManager.hasEnchant(item, this.name)) {
 			if(EnchantManager.getEnchantLevel(item, this) < getIntOption("required-level-for-AOE")) {
-				if(getBooleanOption("veinmine-sneak-mode") == player.isSneaking()) {
+				if(works(player)) {
 					if(Utils.isOre(block)) {
 						Material mat = block.getType();
 						Location loc = block.getLocation();
@@ -68,15 +79,12 @@ public class Veinminer extends Enchant{
 				if(value == 1.0) {
 					Location loc = player.getLocation();
 					List<Block> list = Utils.getNearbyBlocks(loc, (int) Math.floor(EnchantManager.getEnchantLevel(item, this) * getDoubleOption("AOE-range-multiplier")));
-					String[] s = getOption("AOE-materials").split(", ");
-					List<String> names = new ArrayList<String>();
-					for(String name : s) { names.add(name); }
 					for(Block b : new ArrayList<>(list)) {
-						if(!names.contains(b.getType().name())) {
+						if(!mats.contains(b.getType())) {
 							list.remove(b);
 						}
 					}
-					final VeinScanner v = new VeinScanner(list, player.getLocation(), getIntOption("maximum-range"));
+					final VeinScanner v = new VeinScanner(list, player.getLocation(), getIntOption("maximum-blocks"));
 					Thread t = new Thread("Vein Scanner") {
 						public void run() {
 							v.start(true);
@@ -89,11 +97,6 @@ public class Veinminer extends Enchant{
 						e.printStackTrace();
 					}
 					List<Block> blocks = v.getVein();
-					List<Material> mats = new ArrayList<Material>();
-					for(String name : s) {
-						Material m = Material.getMaterial(name);
-						mats.add(m);
-					}
 					Utils.breakCheck(blocks, player, item, loc, mats, true);
 					new BukkitRunnable() {
 						public void run() {
@@ -105,7 +108,7 @@ public class Veinminer extends Enchant{
 						if(Utils.isOre(block)) {
 							Material mat = block.getType();
 							Location loc = block.getLocation();
-							final VeinScanner v = new VeinScanner(block, block.getLocation(), getIntOption("maximum-range"));
+							final VeinScanner v = new VeinScanner(block, block.getLocation(), getIntOption("maximum-blocks"));
 							Thread t = new Thread("Vein Scanner") {
 								public void run() {
 									v.start(false);
@@ -131,7 +134,16 @@ public class Veinminer extends Enchant{
 
 	@Override
 	public void startup() {
-		
+		String[] s = getOption("AOE-materials").split(", ");
+		for(String name : s) { mats.add(Material.getMaterial(name)); }
+	}
+	
+	public static List<Material> getMats() {
+		return mats;
+	}
+	
+	public boolean works(Player p) {
+		return p.isSneaking() == getBooleanOption("veinmine-sneak-mode");
 	}
 }
 
@@ -176,10 +188,9 @@ class VeinScanner{
 			estimate(true);
 		}else {
 			int i = vein.size();
-			List<Block> copy = new ArrayList<>(vein);
-			for(Block b : copy) {
+			for(Block b : new ArrayList<>(vein)) {
 				for(Block bl : Utils.getAdjacentBlocks(b)) {
-					if(bl.getType() == b.getType() && !vein.contains(bl) && (bl.getLocation().distance(initialLoc) < range)) {
+					if(bl.getType() == b.getType() && !vein.contains(bl) && (i < range)) {
 						vein.add(bl);
 					}
 				}

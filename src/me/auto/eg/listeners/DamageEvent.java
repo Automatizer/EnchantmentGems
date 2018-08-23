@@ -11,7 +11,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.plugin.Plugin;
 
-import me.auto.eg.enchants.EnchantManager;
+import me.auto.eg.oldenchants.EnchantManager;
 
 public class DamageEvent implements Listener{
 	

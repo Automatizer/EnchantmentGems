@@ -6,8 +6,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import me.auto.eg.enchants.Enchant;
-import me.auto.eg.enchants.EnchantManager;
+import me.auto.eg.oldenchants.Enchant;
+import me.auto.eg.oldenchants.EnchantManager;
 import me.auto.eg.utils.ChatUtils;
 import me.auto.eg.utils.Settings;
 import me.auto.eg.utils.Utils;

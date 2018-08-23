@@ -12,9 +12,9 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.spigotmc.event.entity.EntityDismountEvent;
 
-import me.auto.eg.enchants.EnchantManager;
-import me.auto.eg.enchants.Leaping;
 import me.auto.eg.main.Main;
+import me.auto.eg.oldenchants.EnchantManager;
+import me.auto.eg.oldenchants.Leaping;
 
 public class EntityDismount implements Listener{
 	

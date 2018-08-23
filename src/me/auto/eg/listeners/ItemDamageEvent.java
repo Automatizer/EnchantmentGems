@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
-import me.auto.eg.enchants.EnchantManager;
+import me.auto.eg.oldenchants.EnchantManager;
 
 public class ItemDamageEvent implements Listener{
 

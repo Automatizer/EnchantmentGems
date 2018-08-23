@@ -11,8 +11,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import me.auto.eg.enchants.EnchantManager;
-import me.auto.eg.enchants.Veinminer;
+import me.auto.eg.oldenchants.EnchantManager;
+import me.auto.eg.oldenchants.Veinminer;
 import me.auto.eg.utils.Cooldowns;
 import me.auto.eg.utils.Utils;
 

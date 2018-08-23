@@ -1,4 +1,4 @@
-package me.auto.eg.enchants;
+package me.auto.eg.oldenchants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,12 +12,10 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.material.MaterialData;
 
 import de.tr7zw.itemnbtapi.NBTItem;
 import me.auto.eg.utils.Utils;
 
-@SuppressWarnings("deprecation")
 public class Magnet extends Enchant{
 	
 	private static Magnet instance = null;
@@ -42,7 +40,7 @@ public class Magnet extends Enchant{
 		permission = "eg.enchant.magnet.#";
 		crystal = new Crystal(this);
 		crystal.displayName = "&3Magnet {enchantlevel}";
-		crystal.material = new MaterialData(Material.EMERALD);
+		crystal.material = Material.EMERALD;
 		setOption("defaultRange", "5");
 		setOption("extraRangePerLevel", "1");
 		setOption("speedPerLevel", "0.25");

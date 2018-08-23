@@ -24,8 +24,8 @@ import com.gmail.nossr50.skills.mining.Mining;
 import com.gmail.nossr50.skills.mining.MiningManager;
 import com.gmail.nossr50.util.player.UserManager;
 
-import me.auto.eg.enchants.EnchantManager;
 import me.auto.eg.main.Main;
+import me.auto.eg.oldenchants.EnchantManager;
 
 /**
  * This class handles utilitary methods.

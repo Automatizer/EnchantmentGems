@@ -9,7 +9,7 @@ import org.bukkit.plugin.Plugin;
 
 import com.codingforcookies.armorequip.ArmorEquipEvent;
 
-import me.auto.eg.enchants.EnchantManager;
+import me.auto.eg.oldenchants.EnchantManager;
 
 public class EquipEvent implements Listener{
 

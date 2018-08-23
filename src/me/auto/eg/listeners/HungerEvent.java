@@ -6,7 +6,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.Plugin;
 
-import me.auto.eg.enchants.EnchantManager;
+import me.auto.eg.oldenchants.EnchantManager;
 
 public class HungerEvent implements Listener{
 

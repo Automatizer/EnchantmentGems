@@ -1,18 +1,17 @@
 package me.auto.eg.main;
 
+import java.lang.reflect.Field;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
-
 import me.auto.eg.commands.Executor;
-import me.auto.eg.enchants.EnchantManager;
 import me.auto.eg.listeners.BlockChange;
 import me.auto.eg.listeners.BreakEvent;
 import me.auto.eg.listeners.DamageEvent;
@@ -35,9 +34,8 @@ import me.auto.eg.listeners.SneakEvent;
 import me.auto.eg.listeners.SwitchToItemEvent;
 import me.auto.eg.listeners.TargetEvent;
 import me.auto.eg.listeners.WeatherEvent;
+import me.auto.eg.oldenchants.EnchantManager;
 import me.auto.eg.utils.ChatUtils;
-import me.auto.eg.utils.EntityHider;
-import me.auto.eg.utils.EntityHider.Policy;
 import me.auto.eg.utils.GTL;
 import me.auto.eg.utils.Recipes;
 import me.auto.eg.utils.Settings;
@@ -56,20 +54,21 @@ public class Main extends JavaPlugin{
 	
 	public static Plugin plugin;
 	public static Settings settings = Settings.getInstance();
-	public static EntityHider entityHider;
-	public static ProtocolManager protocolManager;
 	public static boolean mcMMO;
 
 	/**
 	 * Enables the plugin
 	 */
 	
-	//@SuppressWarnings("deprecation")
 	@SuppressWarnings("deprecation")
 	public void onEnable(){
 		plugin = this;
 		settings.setup(this);
-		protocolManager = ProtocolLibrary.getProtocolManager();
+		try{
+			Field f = Enchantment.class.getDeclaredField("acceptingNew");
+			f.setAccessible(true);
+			f.set(null, true);
+		}catch(Exception e){e.printStackTrace();}
 		getServer().addRecipe(new FurnaceRecipe(new ItemStack(Material.LEATHER), Material.ROTTEN_FLESH));
 		if(Bukkit.getPluginManager().getPlugin("mcMMO") != null && Bukkit.getPluginManager().getPlugin("mcMMO").isEnabled()) {
 			mcMMO = true;
@@ -81,7 +80,6 @@ public class Main extends JavaPlugin{
 		new DamageEvent(this);
 		new DeathEvent(this);
 		new EquipEvent(this);
-		//new FlightEvent(this);
 		new GUIAPI(this);
 		new HungerEvent(this);
 		new InteractEvent(this);
@@ -102,7 +100,6 @@ public class Main extends JavaPlugin{
 		new BlockChange(this);
 		new ItemEnchant(this);
 		GTL.startLoops();
-		entityHider = new EntityHider(plugin, Policy.BLACKLIST);
 		EnchantManager.startup();
 		for(Recipe recipe : Recipes.getRecipes()) getServer().addRecipe(recipe);
 		ChatUtils.messageConsole(ChatUtils.addPrefix(settings.getMessage("Plugin-Enabled")));

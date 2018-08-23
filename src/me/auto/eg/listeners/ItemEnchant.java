@@ -9,7 +9,7 @@ import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-import me.auto.eg.enchants.EnchantManager;
+import me.auto.eg.oldenchants.EnchantManager;
 import me.auto.eg.utils.Utils;
 
 public class ItemEnchant implements Listener{

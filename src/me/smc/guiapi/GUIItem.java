@@ -10,7 +10,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.material.MaterialData;
 
 /**
  * GUIItem
@@ -25,7 +24,7 @@ public abstract class GUIItem implements Listener{
 	private GUI gui;
 	private GUI openonclick;
 	private int amount;
-	private MaterialData material;
+	private Material material;
 	private String title;
 	private HashMap<Enchantment, Integer> enchants = new HashMap<Enchantment, Integer>();
 	private List<String> lore = new ArrayList<String>();
@@ -40,7 +39,7 @@ public abstract class GUIItem implements Listener{
 	 */
 	
 	public GUIItem(String title){
-		this(title, new MaterialData(Material.BOOK));
+		this(title, Material.BOOK);
 	}
 	
 	/**
@@ -50,7 +49,7 @@ public abstract class GUIItem implements Listener{
 	 * @param material MaterialData of the item
 	 */
 	
-	public GUIItem(String title, MaterialData material){
+	public GUIItem(String title, Material material){
 		this(title, material, 1);
 	}
 	
@@ -62,7 +61,7 @@ public abstract class GUIItem implements Listener{
 	 * @param amount Custom stack size for the item
 	 */
 	
-	public GUIItem(String title, MaterialData material, int amount){
+	public GUIItem(String title, Material material, int amount){
 		this.title = title;
 		this.material = material;
 		this.amount = amount;
@@ -94,7 +93,7 @@ public abstract class GUIItem implements Listener{
 	 * @return Returns the MaterialData of the item
 	 */
 	
-	public MaterialData getMaterial(){
+	public Material getMaterial(){
 		return material;
 	}
 	
@@ -104,7 +103,7 @@ public abstract class GUIItem implements Listener{
 	 * @param material The MaterialData to put in place of the old one
 	 */
 	
-	public void setData(MaterialData material){
+	public void setData(Material material){
 		this.material = material;
 	}
 	
@@ -230,11 +229,10 @@ public abstract class GUIItem implements Listener{
 	 * @return Returns the ItemStack representation of the item
 	 */
 	
-	@SuppressWarnings("deprecation")
 	public ItemStack getItem(){
 		ItemStack is = null;
 		if(item != null) is = item;
-		else new ItemStack(material.getItemType(), amount, material.getData());
+		else new ItemStack(material, amount);
 		ItemMeta im = is.getItemMeta();
 		if(title != null) im.setDisplayName(title);
 		if(lore != null && !lore.isEmpty()) im.setLore(lore);

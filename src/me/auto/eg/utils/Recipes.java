@@ -10,8 +10,8 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.material.MaterialData;
 
-import me.auto.eg.enchants.EnchantManager;
-import me.auto.eg.enchants.Magnet;
+import me.auto.eg.oldenchants.EnchantManager;
+import me.auto.eg.oldenchants.Magnet;
 
 @SuppressWarnings("deprecation")
 public class Recipes{

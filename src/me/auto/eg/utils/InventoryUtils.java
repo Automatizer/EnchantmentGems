@@ -13,9 +13,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import me.auto.eg.enchants.Enchant;
-import me.auto.eg.enchants.EnchantManager;
 import me.auto.eg.main.Main;
+import me.auto.eg.oldenchants.Enchant;
+import me.auto.eg.oldenchants.EnchantManager;
 import me.smc.guiapi.GUI;
 import me.smc.guiapi.GUIItem;
 import net.md_5.bungee.api.ChatColor;

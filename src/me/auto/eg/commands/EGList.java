@@ -2,8 +2,8 @@ package me.auto.eg.commands;
 
 import org.bukkit.entity.Player;
 
-import me.auto.eg.enchants.Enchant;
-import me.auto.eg.enchants.EnchantManager;
+import me.auto.eg.oldenchants.Enchant;
+import me.auto.eg.oldenchants.EnchantManager;
 import me.auto.eg.utils.ChatUtils;
 import me.auto.eg.utils.Settings;
 

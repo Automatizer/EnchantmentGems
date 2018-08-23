@@ -1,149 +1,88 @@
 package me.auto.eg.enchants;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.bukkit.ChatColor;
-import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.enchantments.EnchantmentTarget;
+import org.bukkit.enchantments.EnchantmentWrapper;
 import org.bukkit.inventory.ItemStack;
 
-import me.auto.eg.utils.ChatUtils;
 import me.auto.eg.utils.Settings;
 import me.auto.eg.utils.Utils;
 
 /**
- * This class is an object representing an enchantment.
+ * The base class for all new enchants
  * 
- * @author Smc
+ * @author Auto
+ *
  */
 
-public abstract class Enchant{
+public abstract class Enchant extends EnchantmentWrapper{
 	
-	protected String name;
-	protected String crystalName;
-	protected String displayName;
-	protected Crystal crystal;
-	protected String permission;
-	protected int maxLevel = 1;
-	protected List<String> typesAllowed; 
+	protected static String name;
+	protected static Enchantment enchant;
+	protected int maxLevel;
 	protected String event;
-	protected HashMap<String, String> options;
-	
-	/**
-	 * The enchant object constructor
-	 * 
-	 * @param name The enchant's name, has to be the same as the file name
-	 */
-	
-	public Enchant(String name){
-		this.name = name;
-		options = new HashMap<String, String>();
-		typesAllowed = new ArrayList<String>();
-		load();
+	protected List<EnchantmentTarget> typesAllowed;
+	protected List<String> conflicts;
+	protected HashMap<String, String> options = new HashMap<String, String>();
+	protected boolean isTreasure;
+
+	public Enchant() {
+		super(name);
 	}
 	
-	/**
-	 * Returns the enchant's name
-	 * 
-	 * @return The enchant's name
-	 */
-	
-	public String getName(){
-		return name;
+	@Override
+	public boolean canEnchantItem(ItemStack item){
+		for(EnchantmentTarget et : typesAllowed) {
+			if(et.includes(item)) return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean conflictsWith(Enchantment other){
+		return conflicts.contains(other.getKey().getKey());
 	}
 	
-	/**
-	 * Returns the display name of the enchant
-	 * 
-	 * @param The level to display on the display name
-	 * @return The display name of the enchant
-	 */
-	
-	public String getDisplayName(int level){
-		return ChatUtils.decodeMessage(displayName.replace("{enchantlevel}", Utils.getIntInRoman(level)));
+	public boolean conflictsWith(Enchant e) {
+		return conflicts.contains(e.getName());
 	}
-	
-	/**
-	 * Compares two display names to see if they are equal
-	 * 
-	 * @param compareTo The display name to compare
-	 * @return The result of the comparison
-	 */
-	
-	public boolean compareNames(String compareTo){
-		String[] splitDisplayName = getDisplayName(1).split(" ");
-		if(splitDisplayName.length != compareTo.split(" ").length) return false;
-		for(int i = 0; i < splitDisplayName.length - 1; i++)
-			if(!ChatColor.stripColor(splitDisplayName[i]).equalsIgnoreCase(ChatColor.stripColor(compareTo.split(" ")[i])))
-				return false;
-		return true;
+
+	@Override
+	public EnchantmentTarget getItemTarget(){
+		return null;
 	}
-	
-	/**
-	 * Returns the maximum level of the enchant
-	 * 
-	 * @return The maximum level of the enchant
-	 */
-	
+
+	@Override
 	public int getMaxLevel(){
 		return maxLevel;
 	}
+
+	@Override
+	public String getName(){
+		return name;
+	}
+
+	@Override
+	public int getStartLevel(){
+		return 1;
+	}
 	
-	/**
-	 * Returns the name of the event that needs to be called
-	 * 
-	 * @return The name of the event that needs to be called
-	 */
-	
-	public String getEvent(){
-		return event;
+	@Override
+	public boolean isTreasure() {
+		return isTreasure;
 	}
 	
 	/**
-	 * Returns the permission needed to enchant an item
+	 * Fetches an option with the string type
 	 * 
-	 * @param level The level for the permission, to restrict enchanting
-	 * @return The permission to enchant an item
-	 */
-	
-	public String getPermission(int level){
-		if(permission == null) return "";
-		return permission.replace("#", String.valueOf(level));
-	}
-	
-	/**
-	 * Returns true if the type is allowed in the enchant
-	 * 
-	 * @param type The type to check for
-	 * @return Returns true if the type is allowed in the enchant
-	 */
-	
-	public boolean isTypeAllowed(String type){
-		if(typesAllowed.contains(type.toLowerCase())) return true;
-		return false;
-	}
-	
-	/**
-	 * Returns the crystal associated with this enchant
-	 * 
-	 * @return The crystal associated with this enchant
-	 */
-	
-	public Crystal getCrystal(){
-		return crystal;
-	}
-	
-	/**
-	 * Fetches an option as a string
-	 * 
-	 * @param path The path to fetch the option at
-	 * @return The option as a string
+	 * @param path The path to fetch the option from
+	 * @return
 	 */
 	
 	public String getOption(String path){
@@ -153,7 +92,7 @@ public abstract class Enchant{
 	/**
 	 * Fetches an option with the integer type
 	 * 
-	 * @param path The path to fetch the option at
+	 * @param path The path to fetch the option from
 	 * @return The option as an integer
 	 */
 	
@@ -164,7 +103,7 @@ public abstract class Enchant{
 	/**
 	 * Fetches an option with the double type
 	 * 
-	 * @param path The path to fetch the option at
+	 * @param path The path to fetch the option from
 	 * @return The option as a double
 	 */
 	
@@ -175,7 +114,7 @@ public abstract class Enchant{
 	/**
 	 * Fetches an option with the boolean type
 	 * 
-	 * @param path The path to fetch the option at
+	 * @param path The path to fetch the option from
 	 * @return The option as a boolean
 	 */
 	
@@ -186,12 +125,12 @@ public abstract class Enchant{
 	/**
 	 * Sets an option for the enchant
 	 * 
-	 * @param path The path to save the option as
+	 * @param path The path to save the option from
 	 * @param value The value to save
 	 */
 	
 	public void setOption(String path, String value){
-		File file = new File(EnchantManager.getEnchantFolder(), name + ".yml");
+		File file = new File(EnchantManager.manager().getEnchantsFolder(), name + ".yml");
 		FileConfiguration fileConf = YamlConfiguration.loadConfiguration(file);
 		fileConf.set("options." + path, value);
 		options.put(path, value);
@@ -199,63 +138,60 @@ public abstract class Enchant{
 	}
 	
 	/**
-	 * Loads the enchant from file
+	 * Loads the enchant's configuration file
 	 */
 	
-	public void load(){
-		File file = new File(EnchantManager.getEnchantFolder(), name + ".yml");
+	public void load() {
+		File file = new File(EnchantManager.manager().getEnchantsFolder(), name + ".yml");
 		FileConfiguration fileConf = YamlConfiguration.loadConfiguration(file);
 		if(!file.exists()){setDefaults(); save(); return;}
-		if(fileConf.contains("displayName")) displayName = fileConf.getString("displayName");
 		event = fileConf.getString("event");
 		maxLevel = fileConf.getInt("maxLevel");
-		typesAllowed = fileConf.getStringList("typesAllowed");
-		if(fileConf.contains("permission")) permission = fileConf.getString("permission");
-		crystal = new Crystal(this);
-		crystal.load();
-		if(fileConf.contains("options."))
-			for(String option : fileConf.getConfigurationSection("options.").getKeys(false))
-				options.put(option, fileConf.getString("options." + option));	
-		
+		enchant = this;
+		for(String s : fileConf.getStringList("types-allowed")){
+			if(EnchantmentTarget.valueOf(s) != null) {
+				typesAllowed.add(EnchantmentTarget.valueOf(s));
+			}
+		}
+		if(fileConf.contains("options.")) {
+			for(String option : fileConf.getConfigurationSection("options.").getKeys(false)) {
+				options.put(option, fileConf.getString("options." + option));
+			}	
+		}
+		Enchantment.registerEnchantment(enchant);
+		EnchantManager.manager().registerEnchant(this);
 	}
 	
 	/**
-	 * Saves the enchant to file
+	 * Saves the enchant's configuration file
 	 */
 	
 	public void save(){
-		File file = new File(EnchantManager.getEnchantFolder(), name + ".yml");
+		File file = new File(EnchantManager.manager().getEnchantsFolder(), name + ".yml");
 		FileConfiguration fileConf = YamlConfiguration.loadConfiguration(file);
-		if(displayName != null) fileConf.set("displayName", displayName);
 		fileConf.set("event", event);
 		fileConf.set("maxLevel", maxLevel);
 		fileConf.set("typesAllowed", typesAllowed);
-		if(permission != null) fileConf.set("permission", permission);
 		for(String option : options.keySet()) fileConf.set("options." + option, options.get(option));
 		Settings.getInstance().saveConfig(file, fileConf);
-		if(crystal != null) crystal.save();
 	}
 	
 	/**
-	 * Deletes the saved file for this enchant
-	 */
-	
-	public void delete(){
-		new File(EnchantManager.getEnchantFolder(), name + ".yml").delete();
-	}
-	
-	/**
-	 * Sets the default settings for this enchant
+	 * Sets the default values in the configuration file
 	 */
 	
 	public abstract void setDefaults();
 	
 	/**
-	 * Calls the event set for this enchant
+	 * If the enchant needs to load things to memory it does it here
 	 */
 	
-	public abstract void callEvent(ItemStack item, Player player, Entity entity, double value, Block block);
-	
 	public abstract void startup();
+	
+	/**
+	 * The code that is to run when the enchant is used
+	 */
+	
+	public abstract void execute();
 
 }

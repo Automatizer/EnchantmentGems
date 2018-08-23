@@ -7,8 +7,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import me.auto.eg.enchants.EnchantManager;
 import me.auto.eg.main.Main;
+import me.auto.eg.oldenchants.EnchantManager;
 
 
 //stands for Global Tick Loops

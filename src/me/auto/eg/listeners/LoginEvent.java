@@ -7,7 +7,7 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-import me.auto.eg.enchants.EnchantManager;
+import me.auto.eg.oldenchants.EnchantManager;
 import me.auto.eg.utils.ListUtils;
 
 public class LoginEvent implements Listener{

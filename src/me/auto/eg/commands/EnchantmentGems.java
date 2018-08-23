@@ -4,8 +4,8 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-import me.auto.eg.enchants.EnchantManager;
 import me.auto.eg.main.Main;
+import me.auto.eg.oldenchants.EnchantManager;
 import me.auto.eg.utils.ChatUtils;
 import me.auto.eg.utils.Settings;
 import me.auto.eg.utils.Utils;

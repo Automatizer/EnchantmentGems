@@ -1,4 +1,4 @@
-package me.auto.eg.enchants;
+package me.auto.eg.oldenchants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,13 +9,11 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.MaterialData;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.auto.eg.main.Main;
 import me.auto.eg.utils.Utils;
 
-@SuppressWarnings("deprecation")
 public class Veinminer extends Enchant{
 	
 	private static Veinminer instance = null;
@@ -39,7 +37,7 @@ public class Veinminer extends Enchant{
 		event = "veinMine";
 		crystal = new Crystal(this);
 		crystal.displayName = "&3Veinminer {enchantlevel}";
-		crystal.material = new MaterialData(Material.EMERALD);
+		crystal.material = Material.EMERALD;
 		setOption("required-level-for-AOE", "5");
 		setOption("AOE-range-multiplier", "1.5");
 		setOption("maximum-blocks", "500");
@@ -66,8 +64,8 @@ public class Veinminer extends Enchant{
 						t.start();
 						try {
 							t.join();
-						} catch (InterruptedException e) {
-							e.printStackTrace();
+						} catch (InterruptedException ex) {
+							ex.printStackTrace();
 						}
 						List<Block> blocks = v.getVein();
 						ArrayList<Material> mats = new ArrayList<Material>();
@@ -93,8 +91,8 @@ public class Veinminer extends Enchant{
 					t.start();
 					try {
 						t.join();
-					} catch (InterruptedException e) {
-						e.printStackTrace();
+					} catch (InterruptedException ex) {
+						ex.printStackTrace();
 					}
 					List<Block> blocks = v.getVein();
 					Utils.breakCheck(blocks, player, item, loc, mats, true);
@@ -117,8 +115,8 @@ public class Veinminer extends Enchant{
 							t.start();
 							try {
 								t.join();
-							} catch (InterruptedException e) {
-								e.printStackTrace();
+							} catch (InterruptedException ex) {
+								ex.printStackTrace();
 							}
 							List<Block> blocks = v.getVein();
 							ArrayList<Material> mats = new ArrayList<Material>();

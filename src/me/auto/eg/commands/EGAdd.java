@@ -3,8 +3,8 @@ package me.auto.eg.commands;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import me.auto.eg.enchants.Enchant;
-import me.auto.eg.enchants.EnchantManager;
+import me.auto.eg.oldenchants.Enchant;
+import me.auto.eg.oldenchants.EnchantManager;
 import me.auto.eg.utils.Utils;
 
 public class EGAdd{

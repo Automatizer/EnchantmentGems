@@ -13,7 +13,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.google.common.collect.Sets;
 
-import me.auto.eg.enchants.EnchantManager;
+import me.auto.eg.oldenchants.EnchantManager;
 
 public class JumpEvent implements Listener{
 

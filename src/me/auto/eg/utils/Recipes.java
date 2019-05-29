@@ -5,15 +5,14 @@ import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.material.MaterialData;
 
 import me.auto.eg.oldenchants.EnchantManager;
 import me.auto.eg.oldenchants.Magnet;
 
-@SuppressWarnings("deprecation")
 public class Recipes{
 	
 	public static List<Recipe> getRecipes(){
@@ -49,14 +48,14 @@ public class Recipes{
 	}
 	
 	public static ItemStack getHasteShard(){
-		ItemStack shard = new ItemStack(Material.LEGACY_MONSTER_EGG);
+		ItemStack shard = new ItemStack(Material.GOLD_NUGGET);
 	    List<String> lore = new ArrayList<String>();
 	    lore.add(ChatColor.GOLD + "Imagine this is a shard?");
 	    return EnchantManager.setItemWatermark(Utils.addToIM(shard, ChatColor.DARK_AQUA + "Haste Shard", lore));
 	}
 	
 	public static Recipe getRepairGemRecipe(){
-		ShapedRecipe recipe = new ShapedRecipe(getRepairGem());
+		ShapedRecipe recipe = new ShapedRecipe(NamespacedKey.minecraft("repair_gem"), getRepairGem());
 		recipe.shape("***", "*%*", "***");
 		recipe.setIngredient('*', Material.OBSIDIAN);
 		recipe.setIngredient('%', Material.DIAMOND_BLOCK);
@@ -64,7 +63,7 @@ public class Recipes{
 	}
 	
 	public static Recipe getSpeedGemRecipe(){
-		ShapedRecipe recipe = new ShapedRecipe(EnchantManager.getEnchant("flash").getCrystal().getItem(1));
+		ShapedRecipe recipe = new ShapedRecipe(NamespacedKey.minecraft("flash_gem"), EnchantManager.getEnchant("flash").getCrystal().getItem(1));
 		recipe.shape("*=*", "-%-", "*=*");
 		recipe.setIngredient('%', Material.NETHER_STAR);
 		recipe.setIngredient('-', Material.LAPIS_BLOCK);
@@ -74,29 +73,29 @@ public class Recipes{
 	}
 	
 	public static Recipe getLeapingRecipe(){
-		ShapedRecipe recipe = new ShapedRecipe(EnchantManager.getEnchant("leaping").getCrystal().getItem(1));
+		ShapedRecipe recipe = new ShapedRecipe(NamespacedKey.minecraft("leaping_gem"), EnchantManager.getEnchant("leaping").getCrystal().getItem(1));
 		recipe.shape("***", "***", "***");
 		recipe.setIngredient('*', Material.IRON_BLOCK);
 		return recipe;
 	}
 	
 	public static Recipe getHasteShardRecipe(){
-		ShapedRecipe recipe = new ShapedRecipe(getHasteShard());
+		ShapedRecipe recipe = new ShapedRecipe(NamespacedKey.minecraft("haste_shard"), getHasteShard());
 		recipe.shape("***", "***", "***");
 		recipe.setIngredient('*', Material.GOLD_BLOCK);
 		return recipe;
 	}
 	
 	public static Recipe getHasteRecipe(){
-		ShapedRecipe recipe = new ShapedRecipe(EnchantManager.getEnchant("haste").getCrystal().getItem(1));
+		ShapedRecipe recipe = new ShapedRecipe(NamespacedKey.minecraft("haste_gem"), EnchantManager.getEnchant("haste").getCrystal().getItem(1));
 		recipe.shape("***", "*%*", "***");
-		recipe.setIngredient('*', new MaterialData(Material.LEGACY_MONSTER_EGG, (byte) 0));
+		recipe.setIngredient('*', Material.GOLD_NUGGET);
 		recipe.setIngredient('%', Material.NETHER_STAR);
 		return recipe;
 	}
 	
 	public static Recipe getMagnetRecipe() {
-		ShapedRecipe recipe = new ShapedRecipe(EnchantManager.getEnchant("magnet").getCrystal().getItem(1));
+		ShapedRecipe recipe = new ShapedRecipe(NamespacedKey.minecraft("magnet_gem"), EnchantManager.getEnchant("magnet").getCrystal().getItem(1));
 		recipe.shape("*%*", "%^%", "*%*");
 		recipe.setIngredient('*', Material.QUARTZ);
 		recipe.setIngredient('%', Material.REDSTONE);
@@ -105,7 +104,7 @@ public class Recipes{
 	}
 	
 	public static Recipe getMagnetTogglerRecipe() {
-		ShapedRecipe recipe = new ShapedRecipe(Magnet.getInstance().getToggle());
+		ShapedRecipe recipe = new ShapedRecipe(NamespacedKey.minecraft("magnet_toggler"), Magnet.getInstance().getToggle());
 		recipe.shape("*%*", "*^*", "***");
 		recipe.setIngredient('*', Material.REDSTONE_BLOCK);
 		recipe.setIngredient('%', Material.LEVER);
@@ -114,7 +113,7 @@ public class Recipes{
 	}
 	
 	public static Recipe getNightvisionRecipe() {
-		ShapedRecipe recipe = new ShapedRecipe(EnchantManager.getEnchant("nightvision").getCrystal().getItem(1));
+		ShapedRecipe recipe = new ShapedRecipe(NamespacedKey.minecraft("nightvision"), EnchantManager.getEnchant("nightvision").getCrystal().getItem(1));
 		recipe.shape("***", "%^%", "&&&");
 		recipe.setIngredient('*', Material.DAYLIGHT_DETECTOR);
 		recipe.setIngredient('%', Material.BEACON);

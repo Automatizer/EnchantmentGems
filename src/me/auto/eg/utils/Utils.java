@@ -18,13 +18,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.gmail.nossr50.datatypes.player.McMMOPlayer;
-import com.gmail.nossr50.datatypes.skills.XPGainReason;
-import com.gmail.nossr50.skills.mining.Mining;
-import com.gmail.nossr50.skills.mining.MiningManager;
-import com.gmail.nossr50.util.player.UserManager;
-
-import me.auto.eg.main.Main;
 import me.auto.eg.oldenchants.EnchantManager;
 
 /**
@@ -280,11 +273,6 @@ public class Utils{
     	if(is.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)) {
 			for(Block b : blocks) {
 				if(blacklist.contains(b.getType()) == blacklistType) {
-					if(Main.mcMMO) {
-						McMMOPlayer mp = UserManager.getPlayer(p);
-						MiningManager manager = mp.getMiningManager();
-						manager.applyXpGain(Mining.getBlockXp(b.getState()) / 10, XPGainReason.PVE);
-					}
 					ItemStack item = new ItemStack(b.getType());
 					b.getWorld().dropItem(loc, item);
 					b.setType(Material.AIR);
@@ -293,11 +281,6 @@ public class Utils{
 		}else {
 			for(Block b : blocks) {
 				if(blacklist.contains(b.getType()) == blacklistType) {
-					if(Main.mcMMO) {
-						McMMOPlayer mp = UserManager.getPlayer(p);
-						MiningManager manager = mp.getMiningManager();
-						manager.applyXpGain(Mining.getBlockXp(b.getState()) / 10, XPGainReason.PVE);
-					}
 					p.giveExp(getBlockExp(b));
 					b.breakNaturally();
 				}

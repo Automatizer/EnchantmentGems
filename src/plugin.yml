@@ -3,8 +3,7 @@ author: Smc
 main: me.auto.eg.main.Main
 description: Enchantment Gems
 version: 1.0
-depend: [GUI-API, ItemNBTAPI,  ArmorEquipEvent, PermissionsEx, KeepItems]
-softdepend: [mcMMO]
+depend: [ItemNBTAPI, ArmorEquipEvent]
 api-version: 1.13
 commands:
     eg:

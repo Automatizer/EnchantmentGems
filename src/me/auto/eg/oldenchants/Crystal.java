@@ -170,10 +170,12 @@ public class Crystal{
 	public void save(){
 		File file = new File(EnchantManager.getEnchantFolder(), enchant.getName() + ".yml");
 		FileConfiguration fileConf = YamlConfiguration.loadConfiguration(file);
-		fileConf.set("crystal.material.name", material.name());
-		fileConf.set("crystal.displayName", displayName);
-		if(lore != null && !lore.isEmpty()) fileConf.set("crystal.lore", lore);
-		Settings.getInstance().saveConfig(file, fileConf);
+		if(fileConf != null) {
+			fileConf.set("crystal.material.name", material.name());
+			fileConf.set("crystal.displayName", displayName);
+			if(lore != null && !lore.isEmpty()) fileConf.set("crystal.lore", lore);
+			Settings.getInstance().saveConfig(file, fileConf);
+		}
 	}
 	
 }

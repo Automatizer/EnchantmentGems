@@ -37,10 +37,6 @@ public class Executor implements CommandExecutor{
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args){
 		if(!(sender instanceof Player)){
-			if(cmd.getName().equalsIgnoreCase("eg") && args[0].equalsIgnoreCase("give") && args[1].equalsIgnoreCase("crystal")){
-				EGGive.runCommand(sender, args);
-				return true;
-			}
 			sender.sendMessage(ChatUtils.addPrefix(settings.getMessage("Console-Command-Error")));
 			return true;
 		}

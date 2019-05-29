@@ -53,11 +53,7 @@ public class AutoSmelt extends Enchant{
 	
 	private boolean chance(int level) {
 		int i = Utils.randomBetween(0, 100);
-		if(i < (getIntOption("chance-percent-per-level") * level)) {
-			return true;
-		}else {
-			return false;
-		}
+		return i < (getIntOption("chance-percent-per-level") * level);
 	}
 	
 	private void processBlock(Player p, Block b, ItemStack is) {

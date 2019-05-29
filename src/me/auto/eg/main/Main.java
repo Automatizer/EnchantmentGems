@@ -2,8 +2,8 @@ package me.auto.eg.main;
 
 import java.lang.reflect.Field;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
@@ -28,7 +28,6 @@ import me.auto.eg.listeners.ItemPickup;
 import me.auto.eg.listeners.JoinEvent;
 import me.auto.eg.listeners.JumpEvent;
 import me.auto.eg.listeners.LoginEvent;
-import me.auto.eg.listeners.MoveEvent;
 import me.auto.eg.listeners.PlayerRespawn;
 import me.auto.eg.listeners.SneakEvent;
 import me.auto.eg.listeners.SwitchToItemEvent;
@@ -36,7 +35,6 @@ import me.auto.eg.listeners.TargetEvent;
 import me.auto.eg.listeners.WeatherEvent;
 import me.auto.eg.oldenchants.EnchantManager;
 import me.auto.eg.utils.ChatUtils;
-import me.auto.eg.utils.GTL;
 import me.auto.eg.utils.Recipes;
 import me.auto.eg.utils.Settings;
 import me.smc.guiapi.GUIAPI;
@@ -49,18 +47,14 @@ import me.smc.guiapi.GUIAPI;
  */
 
 public class Main extends JavaPlugin{
-
-	//Events valid: switchToItem, attackEntity, hitByEntity, killedEntity, onEquip, onHunger
 	
 	public static Plugin plugin;
 	public static Settings settings = Settings.getInstance();
-	public static boolean mcMMO;
 
 	/**
 	 * Enables the plugin
 	 */
 	
-	@SuppressWarnings("deprecation")
 	public void onEnable(){
 		plugin = this;
 		settings.setup(this);
@@ -69,10 +63,7 @@ public class Main extends JavaPlugin{
 			f.setAccessible(true);
 			f.set(null, true);
 		}catch(Exception e){e.printStackTrace();}
-		getServer().addRecipe(new FurnaceRecipe(new ItemStack(Material.LEATHER), Material.ROTTEN_FLESH));
-		if(Bukkit.getPluginManager().getPlugin("mcMMO") != null && Bukkit.getPluginManager().getPlugin("mcMMO").isEnabled()) {
-			mcMMO = true;
-		}else {mcMMO = false;}
+		getServer().addRecipe(new FurnaceRecipe(NamespacedKey.minecraft("smelt_leather"), new ItemStack(Material.LEATHER), Material.ROTTEN_FLESH, 1, 200));
 		this.getCommand("eg").setExecutor(new Executor());
 		this.getCommand("sudoku").setExecutor(new Executor());
 		this.getCommand("trash").setExecutor(new Executor());
@@ -86,7 +77,6 @@ public class Main extends JavaPlugin{
 		new InvClickEvent(this);
 		new ItemDamageEvent(this);
 		new JoinEvent(this);
-		new MoveEvent(this);
 		new SwitchToItemEvent(this);
 		new LoginEvent(this);
 		new WeatherEvent(this);
@@ -99,9 +89,8 @@ public class Main extends JavaPlugin{
 		new PlayerRespawn(this);
 		new BlockChange(this);
 		new ItemEnchant(this);
-		GTL.startLoops();
-		EnchantManager.startup();
 		for(Recipe recipe : Recipes.getRecipes()) getServer().addRecipe(recipe);
+		EnchantManager.startup();
 		ChatUtils.messageConsole(ChatUtils.addPrefix(settings.getMessage("Plugin-Enabled")));
 	}
 	

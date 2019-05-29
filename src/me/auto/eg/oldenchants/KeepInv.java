@@ -8,9 +8,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import ru.tehkode.permissions.PermissionUser;
-import ru.tehkode.permissions.bukkit.PermissionsEx;
-
 public class KeepInv extends Enchant{
 
 	public KeepInv() {
@@ -45,14 +42,7 @@ public class KeepInv extends Enchant{
 				items.add(item);
 			}
 		}
-		PermissionUser user = PermissionsEx.getUser(player);
-		if(items.size() == 4) {
-			user.addPermission("keepitems.keep");
-			user.addPermission("keepitems.keepxp");
-		}else if((user.has("keepitems.keep")) && (user.has("keepitems.keepxp")) ) {
-			user.removePermission("keepitems.keep");
-			user.removePermission("keepitems.keepxp");
-		}
+		
 	}
 
 	@Override
